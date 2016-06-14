@@ -7,12 +7,13 @@
 # (c) For more information, see http://www.rosettacommons.org. Questions about this can be
 # (c) addressed to University of Washington UW TechTransfer, email: license@u.washington.edu.
 
-check_setup()
+library(ggplot2)
+library(plyr)
 
 feature_analyses <- c(feature_analyses, new("FeaturesAnalysis",
 id = "int_packing-sc_value_vs",
 author = "Jared Adolf-Bryfogle",
-brief_description = "Graphs Interface metrics such as packstat and shape complementarity scores",
+brief_description = "Graphs Interface metrics such as packstat vs other metrics",
 feature_reporter_dependencies = c("InterfaceFeatures/AntibodyFeatures"),
 run=function(self, sample_sources, output_dir, output_formats){
   

@@ -7,16 +7,17 @@
 # (c) For more information, see http://www.rosettacommons.org. Questions about this can be
 # (c) addressed to University of Washington UW TechTransfer, email: license@u.washington.edu.
 
-check_setup()
+library(ggplot2)
+library(plyr)
 
-feature_analyses <- c(feature_analyses, new("FeaturesAnalysis",
+feature_analyses <- c(feature_analyses, methods::new("FeaturesAnalysis",
 id = "int_hbonds_den",
 author = "Jared Adolf-Bryfogle",
 brief_description = "Graphs basic hbond densities for interface - interface hbonds",
 feature_reporter_dependencies = c("InterfaceFeatures/AntibodyFeatures", "HBondFeatures"),
 run=function(self, sample_sources, output_dir, output_formats){
   
-  #Thanks to Matt O'Meara's help for this query -  Very slow:
+  #Thanks to Matt O'Meara's help for this query -  VERY slow:
   
 
   sele = "

@@ -7,9 +7,10 @@
 # (c) For more information, see http://www.rosettacommons.org. Questions about this can be
 # (c) addressed to University of Washington UW TechTransfer, email: license@u.washington.edu.
 
-check_setup()
+library(ggplot2)
+library(plyr)
 
-feature_analyses <- c(feature_analyses, new("FeaturesAnalysis",
+feature_analyses <- c(feature_analyses, methods::new("FeaturesAnalysis",
 id = "int_composition_den",
 author = "Jared Adolf-Bryfogle",
 brief_description = "Graphs basic composition of the interfaces, restypes, etc",
@@ -148,47 +149,6 @@ run=function(self, sample_sources, output_dir, output_formats){
     ylab("% of Sample Source")
   plot_field(p, "restype_composition_by_all") 
   plot_field(p, "restype_composition_by_interface", grid=interface ~ .)
-
-  #Need to know how this compares relative to the overall restype composition!
-#  fields = c("dSASA", "dSASA_bb", "dSASA_sc", "SASA_int", "dSASA_fraction")
-#  for (field in fields){
-#
-#    
-#    p <- ggplot(data=get_percent(res_data[res_data[field] == 0,]), aes(x = restype1, fill=sample_source)) + 
-#      geom_bar(position="dodge", stat="identity", aes(y=perc))+ 
-#      theme_bw() +
-#      scale_y_continuous(label=percent) +
-#      ggtitle(paste("Interface ResType Composition @0", field))
-#     #scale_x_continuous("restype") +
-# 
-#    plot_field(p, paste("restype_composition_@_0",field, "by_all", sep="_")) 
-#    plot_field(p, paste("restype_composition_@_0",field, "by_interface", sep="_"), grid=interface ~ .)
-#    
-#    v = 0
-#    p <- ggplot(data=get_percent(res_data[res_data[field] > v,]), aes(x = restype1, fill=sample_source)) + 
-#      geom_bar(position="dodge", stat="identity", aes(y=perc))+ 
-#      theme_bw() +
-#      scale_y_continuous(label=percent) +
-#      ggtitle(paste("Interface ResType Composition >", v, field))
-#      #scale_x_continuous("restype") +
-# 
-#    plot_field(p, paste("restype_composition_>",v, field, "by_all", sep="_")) 
-#    plot_field(p, paste("restype_composition_>",v, field, "by_interface", sep="_"), grid=interface ~ .)
-#    
-#  }
-  
-#  field = "dSASA_fraction"
-#    for (v in c(.25, .75)){
-#
-#      p <- ggplot(data=get_percent(res_data[res_data[field] > v,]), aes(x = restype1, fill=sample_source)) + 
-#        geom_bar(position="dodge", stat="identity", aes(y=perc))+ 
-#        theme_bw() +
-#        scale_y_continuous(label=percent) +
-#        ggtitle(paste("Interface ResType Composition >", v, field))
-#      #scale_x_continuous("restype") +
-# 
-#    plot_field(p, paste("restype_composition_>",v, field, "by_all", sep="_")) 
-#    plot_field(p, paste("restype_composition_>",v, field, "by_interface", sep="_"), grid=interface ~ .)
       
       
     

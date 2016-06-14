@@ -7,9 +7,10 @@
 # (c) For more information, see http://www.rosettacommons.org. Questions about this can be
 # (c) addressed to University of Washington UW TechTransfer, email: license@u.washington.edu.
 
-check_setup()
+library(ggplot2)
+library(plyr)
 
-feature_analyses <- c(feature_analyses, new("FeaturesAnalysis",
+feature_analyses <- c(feature_analyses, methods::new("FeaturesAnalysis",
 id = "int_SASA-by_residue_den",
 author = "Jared Adolf-Bryfogle",
 brief_description = "Graphs all information of individual interface residues.
@@ -55,7 +56,10 @@ run=function(self, sample_sources, output_dir, output_formats){
   #Densities
   
   #dSASA
+  #JAB - Comment out hydrophobic component as I don't think its very useful and it creates too man plots.
   fields = c("dSASA", "dSASA_bb", "dSASA_sc", "dhSASA", "dhSASA_bb", "dhSASA_sc", "dhSASA_rel_by_charge")
+  fields = c("dSASA", "dSASA_bb", "dSASA_sc")
+  
   for (field in fields){
     group = c("sample_source")
     dens <- estimate_density_1d(data[data$dSASA > 0,],  group, field)
@@ -122,5 +126,4 @@ run=function(self, sample_sources, output_dir, output_formats){
   plot_field(p, paste(field, "residue_dens_by_interface", sep="_"), grid=interface ~ .)
   
   
-  #Per residue data.  This may get crazy.
 }))

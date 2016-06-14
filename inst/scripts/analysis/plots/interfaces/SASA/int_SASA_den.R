@@ -7,9 +7,10 @@
 # (c) For more information, see http://www.rosettacommons.org. Questions about this can be
 # (c) addressed to University of Washington UW TechTransfer, email: license@u.washington.edu.
 
-check_setup()
+library(ggplot2)
+library(plyr)
 
-feature_analyses <- c(feature_analyses, new("FeaturesAnalysis",
+feature_analyses <- c(feature_analyses, methods::new("FeaturesAnalysis",
 id = "int_SASA_den",
 author = "Jared Adolf-Bryfogle",
 brief_description = "Graphs basic dSASA and SASA information",
@@ -116,7 +117,10 @@ run=function(self, sample_sources, output_dir, output_formats){
   #print(data)
   
   #Backbone SASA may not be interesting, but I want I still want to know for now.
+  #JAB - Commenting out hydrophibic sasa.  Not very useful from my experience and it makes too many plots.
   fields = c("dSASA", "dSASA_bb", "dSASA_sc", "dhSASA", "dhSASA_bb", "dhSASA_sc", "dhSASA_rel_by_charge")
+  fields = c("dSASA", "dSASA_bb", "dSASA_sc")
+  
   for (field in fields){
 
     parts = list(plot_parts, scale_x_continuous("SASA"))

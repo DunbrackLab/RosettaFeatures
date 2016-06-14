@@ -7,9 +7,10 @@
 # (c) For more information, see http://www.rosettacommons.org. Questions about this can be
 # (c) addressed to University of Washington UW TechTransfer, email: license@u.washington.edu.
 
-check_setup()
+library(ggplot2)
+library(plyr)
 
-feature_analyses <- c(feature_analyses, new("FeaturesAnalysis",
+feature_analyses <- c(feature_analyses, methods::new("FeaturesAnalysis",
 id = "int_hbonds-unsat_polars_vs",
 author = "Jared Adolf-Bryfogle",
 brief_description = "Graphs basic interface energy information",
@@ -85,12 +86,13 @@ run=function(self, sample_sources, output_dir, output_formats){
   #unsat hbonds vs hbond E fraction
   
   #unsat hbonds vs dG_Cross
-  p <- ggplot(data = data, aes(y=dG_cross, x=delta_unsatHbonds)) + parts +
-    ggtitle("Delta unsatisfied Polar Atoms vs Crossterm dG") +
-    ylab("REU") +
-    xlab("atoms")
-  plot_field(p, "delta_unsat_polars_vs_dG_cross_by_all", grid=sample_source ~ .)
-  plot_field(p, "delta_unsat_polars_vs_dG_cross_by_interface", grid=interface ~ sample_source)
+  #JAB - commenting out.  dG_Cross is actually pretty useless
+  #p <- ggplot(data = data, aes(y=dG_cross, x=delta_unsatHbonds)) + parts +
+  #  ggtitle("Delta unsatisfied Polar Atoms vs Crossterm dG") +
+  #  ylab("REU") +
+  #  xlab("atoms")
+  #plot_field(p, "delta_unsat_polars_vs_dG_cross_by_all", grid=sample_source ~ .)
+  #plot_field(p, "delta_unsat_polars_vs_dG_cross_by_interface", grid=interface ~ sample_source)
   
   
 })) # end FeaturesAnalysis

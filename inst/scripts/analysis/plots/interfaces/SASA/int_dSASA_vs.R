@@ -7,9 +7,10 @@
 # (c) For more information, see http://www.rosettacommons.org. Questions about this can be
 # (c) addressed to University of Washington UW TechTransfer, email: license@u.washington.edu.
 
-check_setup()
+library(ggplot2)
+library(plyr)
 
-feature_analyses <- c(feature_analyses, new("FeaturesAnalysis",
+feature_analyses <- c(feature_analyses, methods::new("FeaturesAnalysis",
 id = "int_SASA-dSASA_vs",
 author = "Jared Adolf-Bryfogle",
 brief_description = "Graphs basic dSASA and SASA information",
@@ -80,8 +81,11 @@ run=function(self, sample_sources, output_dir, output_formats){
     #stat_density2d(aes(fill = ..level..), geom="polygon"),
     #stat_density2d(geom="tile", aes(fill = ..density..), contour = FALSE),
     theme_bw())
+  #JAB - commenting out the hydrophobic dSASA.  Unclear if this is useful or not.  I don't think it is very much.
+  #fields = c("dSASA", "dSASA_bb", "dSASA_sc", "dhSASA", "dhSASA_bb", "dhSASA_sc", "dhSASA_rel_by_charge")
   
-  fields = c("dSASA", "dSASA_bb", "dSASA_sc", "dhSASA", "dhSASA_bb", "dhSASA_sc", "dhSASA_rel_by_charge")
+  fields = c("dSASA", "dSASA_bb", "dSASA_sc")
+  
   for (f in fields){
     
     #dSASA vs dG

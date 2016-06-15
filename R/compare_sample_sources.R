@@ -8,8 +8,6 @@
 # (c) For more information, see http://www.rosettacommons.org. Questions about this can be
 # (c) addressed to University of Washington UW TechTransfer, email: license@u.washington.edu.
 
-
-
 load_config_file <- function(config_filename, verbose=F){
 	if(!file.exists(config_filename)){
 		cat("ERROR: Config file '", config_filename, "' does not exist.\n", sep="")

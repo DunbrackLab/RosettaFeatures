@@ -4,4 +4,7 @@
 
 
 #install.packages("devtools", repos="http://cran.rstudio.com/")
-devtools::install_github("DunbrackLab/RosettaFeatures")
+devtools::document() # if you changed function signatures
+devtools:build()
+
+devtools::install_local(".")

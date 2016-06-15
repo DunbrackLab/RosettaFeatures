@@ -37,6 +37,13 @@ To install this package, in R:
     }
     devtools::install_github("momeara/RosettaFeatures")
 
+To install locally, run the ```install_local.R``` script or run the following:
+
+    devtools::document() # if you changed function signatures
+    devtools:build()
+
+    devtools::install_local(PATH)
+    
 Generate features databases following the features_benchmark protocol capture
 
     https://github.com/RosettaCommons/demos/tree/master/protocol_capture/features_benchmark/README.md
@@ -45,10 +52,11 @@ Generate features databases following the features_benchmark protocol capture
 Then to report features, in R:
 
     library(RosettaFeatures)
+    libary(methods)
     compare_sample_sources(
       config_filename="analysis_configuration.json")
 
-Where the `analysis_configuration.json` looks like:
+Where the `analysis_configuration.json` looks like (note the change removal of compare_sample_sources main dictionary from previous the pre-library version):
 
     {
       "output_dir" : "native_vs_relax_native",

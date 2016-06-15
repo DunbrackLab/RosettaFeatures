@@ -5,7 +5,7 @@ Title: Tools for analyzing macromolecular feature distributions with Rosetta
 Description: A Stela is a slab, such as the Rosetta stone, that
     illustrates small symbols or diagrams showing rules or
     patterns. This package supports the analysis of molecular energy
-    function by comparing distributions of local geometric features,
+    function or other molecular charactoristics by comparing distributions of local geometric features,
     often obtained from native or Rosetta-simulated macromolecular
     conformations.
 Authors@R: person("Matthew", "O'Meara", email = "mattjomeara@gmail.com",

@@ -1,4 +1,7 @@
 library(RSQLite)
+library(ggplot2)
+library(plyr)
+
 
 db_path <- "/scratch/weitzner/loop_features_test/antibodies_f33ffc7_130904/features_antibodies_f33ffc7_130904.db3"
 

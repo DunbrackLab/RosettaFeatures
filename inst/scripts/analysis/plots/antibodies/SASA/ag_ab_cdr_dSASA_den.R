@@ -7,9 +7,10 @@
 # (c) For more information, see http://www.rosettacommons.org. Questions about this can be
 # (c) addressed to University of Washington UW TechTransfer, email: license@u.washington.edu.
 
-check_setup()
+library(ggplot2)
+library(plyr)
 
-feature_analyses <- c(feature_analyses, new("FeaturesAnalysis",
+feature_analyses <- c(feature_analyses, methods::new("FeaturesAnalysis",
 id = "ab_dSASA-ab_cdr_den",
 author = "Jared Adolf-Bryfogle",
 brief_description = "CDR Sasas",

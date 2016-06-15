@@ -7,8 +7,10 @@
 # (c) For more information, see http://www.rosettacommons.org. Questions about this can be
 # (c) addressed to University of Washington UW TechTransfer, email: license@u.washington.edu.
 
-check_setup()
-feature_analyses <- c(feature_analyses, new("FeaturesAnalysis",
+library(ggplot2)
+library(plyr)
+
+feature_analyses <- c(feature_analyses, methods::new("FeaturesAnalysis",
 id = "cdr_cluster_recovery",
 author = "Jared Adolf-Bryfogle",
 brief_description = "Used for length and cluster recovery of CDRs.  Mainly for AbDesign program based on North Clusters,",

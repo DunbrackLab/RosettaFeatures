@@ -8,8 +8,10 @@
 # (c) addressed to University of Washington UW TechTransfer, email: license@u.washington.edu.
 
 
-check_setup()
-feature_analyses <- c(feature_analyses, new("FeaturesAnalysis",
+library(ggplot2)
+library(plyr)
+
+feature_analyses <- c(feature_analyses, methods::new("FeaturesAnalysis",
 id = "total_score",
 author = "Jared Adolf-Bryfogle", 
 brief_description = "",

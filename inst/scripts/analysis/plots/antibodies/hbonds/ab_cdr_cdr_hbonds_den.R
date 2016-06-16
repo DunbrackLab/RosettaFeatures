@@ -9,6 +9,7 @@
 
 library(ggplot2)
 library(plyr)
+library(grid)
 
 feature_analyses <- c(feature_analyses, methods::new("FeaturesAnalysis",
 id = "ab_hbonds-cdr_cdr_den",

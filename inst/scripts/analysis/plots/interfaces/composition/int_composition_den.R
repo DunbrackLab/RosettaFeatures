@@ -9,6 +9,7 @@
 
 library(ggplot2)
 library(plyr)
+library(grid)
 
 feature_analyses <- c(feature_analyses, methods::new("FeaturesAnalysis",
 id = "int_composition_den",
@@ -16,6 +17,18 @@ author = "Jared Adolf-Bryfogle",
 brief_description = "Graphs basic composition of the interfaces, restypes, etc",
 feature_reporter_dependencies = c("InterfaceFeatures/AntibodyFeatures","ResidueFeatures", "ResidueTypesFeatures", "PdbDataFeatures"),
 
+#Because R is stupid and can't find this function.
+
+capwords <- function(s, strict = FALSE)
+{
+  cap <- function(s) paste(toupper(substring(s, 1, 1)), {
+    s <- substring(s, 2)
+    if (strict)
+      tolower(s)
+    else s
+  }, sep = "", collapse = " ")
+  sapply(strsplit(s, split = " "), cap, USE.NAMES = !is.null(names(s)))
+}
 
 run=function(self, sample_sources, output_dir, output_formats){
 

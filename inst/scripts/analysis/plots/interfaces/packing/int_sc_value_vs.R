@@ -9,6 +9,7 @@
 
 library(ggplot2)
 library(plyr)
+library(grid)
 
 feature_analyses <- c(feature_analyses, new("FeaturesAnalysis",
 id = "int_packing-sc_value_vs",

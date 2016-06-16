@@ -119,7 +119,7 @@ GeomIndicator <- ggplot2::ggproto(
 			unit(xpos, "npc"),
 			unit(ypos, "npc") - unit(level, "line"),
 			just=c(xjust, yjust),
-			gp=gpar(
+			gp=grid::gpar(
 				col=alpha(data$colour[1], data$alpha[1]),
 				fontsize=size*12/5,
 				fontfamily=data$family[1],

@@ -114,7 +114,7 @@ GeomIndicator <- ggplot2::ggproto(
 		size <- data$size[1]
 		level <- data$group[1] - 1
 
-		textGrob(
+		grid::textGrob(
 			indicator_display_value,
 			unit(xpos, "npc"),
 			unit(ypos, "npc") - unit(level, "line"),

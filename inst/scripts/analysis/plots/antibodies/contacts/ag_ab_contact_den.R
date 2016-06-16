@@ -58,7 +58,7 @@ run=function(self, sample_sources, output_dir, output_formats){
   p <- ggplot(data=binary_data, na.rm=T, aes(x=CDR)) +
     geom_bar(position="dodge", aes(y=percent, fill=sample_source), stat='identity') +
     ggtitle("CDR Makes Antigen Contact") +
-    scale_y_continuous(label=percent) +
+    scale_y_continuous(label="percent") +
     ylab("% of sample source")
   plot_field(p, "cdr_makes_contact_hist")
   save_tables(self, binary_data, "cdr_makes_contact_table", sample_sources, output_dir, output_formats,
@@ -117,7 +117,7 @@ run=function(self, sample_sources, output_dir, output_formats){
     ggtitle("Average Percent of total contacts") +
     xlab("CDR") +
     ylab("Avg %") +
-    scale_y_continuous(label=percent)
+    scale_y_continuous(label="percent")
   plot_field(p, "avg_perc_total_contacts_hist")
   save_tables(self, avg_perc, "avg_perc_total_contacts_table", sample_sources, output_dir, output_formats,
     caption="Avg Percent of total contacts", caption.placement="top", quote_strings=F)

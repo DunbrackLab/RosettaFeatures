@@ -27,6 +27,7 @@ Imports:
     optparse,
     reshape2,
     proto,
+    grid,
     ggplot2 (>= 1.0.1),
     RSQLite,
     logspline,

@@ -10,6 +10,7 @@
 
 # Save the last ggplot() object created. For each output format,
 # generate a plot and put in the output directory
+
 #' @export
 save_plots <- function(
 	features_analysis,

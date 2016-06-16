@@ -138,14 +138,14 @@ run=function(self, sample_sources, output_dir, output_formats){
   #Histogram
   p <- ggplot(data=hbond_counts, na.rm=T) + 
     geom_bar(aes(x=n, y = ..density.. , fill=sample_source), position="dodge", binwidth=1) +
-    scale_y_continuous(label=percent) +
+    scale_y_continuous(label="percent") +
     xlab("hbonds") +
     ggtitle("Average Cross Interface Hydrogen Bonds")
   plot_field(p, "hbond_hist_by_all")
   
   p <- ggplot(data=hbond_counts, na.rm=T) + 
     geom_bar(aes(x=n, y = ..density.. , fill=sample_source), position="dodge", binwidth=1) +
-    scale_y_continuous(label=percent) +
+    scale_y_continuous(label="percent") +
     xlab("hbonds") +
     ggtitle("Average Cross Interface Hydrogen Bonds")
   plot_field(p, "hbond_hist_by_interface", grid=~interface)

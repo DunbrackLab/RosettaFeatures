@@ -82,7 +82,7 @@ run=function(self, sample_sources, output_dir, output_formats){
     scale_x_continuous("charge", breaks = seq(min(perc$net_charge), max(perc$net_charge), 2)) +
     ggtitle("Antibody Net Charge") +
     ylab("% of Sample Source") +
-    scale_y_continuous(label=percent)
+    scale_y_continuous(label="percent")
     #scale_x_continuous("restype") +
     #scale_y_continuous("n")
   plot_field(p, "net_charge_hist")
@@ -127,7 +127,7 @@ run=function(self, sample_sources, output_dir, output_formats){
     ggtitle("Paratope Net Charge") +
     scale_x_continuous("charge", breaks = seq(min(perc$paratope_charge), max(perc$paratope_charge), 2)) +
     ylab("% of Sample Source") +
-    scale_y_continuous(label=percent)
+    scale_y_continuous(label="percent")
     #scale_x_continuous("restype") +
     #scale_y_continuous("n")
   plot_field(p, "paratope_charge_hist")
@@ -204,7 +204,7 @@ run=function(self, sample_sources, output_dir, output_formats){
       theme_bw() +
       #scale_x_continuous("charge",  breaks = get_charge_seq(perc, 1)) +
       ggtitle("CDR Charge") +
-      scale_y_continuous("charge", label=percent) +
+      scale_y_continuous("charge", label="percent") +
       ylab("% of Sample Source")
   plot_field_wrap(p, "cdr_charge_hist", ~ CDR)
     

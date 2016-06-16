@@ -162,7 +162,7 @@ run=function(self, sample_sources, output_dir, output_formats){
     geom_bar(position="dodge", stat="identity", aes(y=perc, fill=sample_source))+ 
     theme_bw() +
     ggtitle("Interface ResType Composition") +
-    scale_y_continuous(label=percent) +
+    scale_y_continuous(label="percent") +
     ylab("% of Sample Source")
   plot_field(p, "restype_composition_by_all") 
   plot_field(p, "restype_composition_by_interface", grid=interface ~ .)

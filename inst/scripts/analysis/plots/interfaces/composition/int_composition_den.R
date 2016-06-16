@@ -19,16 +19,7 @@ feature_reporter_dependencies = c("InterfaceFeatures/AntibodyFeatures","ResidueF
 
 #Because R is stupid and can't find this function.
 
-capwords <- function(s, strict = FALSE)
-{
-  cap <- function(s) paste(toupper(substring(s, 1, 1)), {
-    s <- substring(s, 2)
-    if (strict)
-      tolower(s)
-    else s
-  }, sep = "", collapse = " ")
-  sapply(strsplit(s, split = " "), cap, USE.NAMES = !is.null(names(s)))
-}
+
 
 run=function(self, sample_sources, output_dir, output_formats){
 
@@ -42,6 +33,19 @@ run=function(self, sample_sources, output_dir, output_formats){
   FROM
     interface_sides
   "
+
+  capwords <- function(s, strict = FALSE)
+  {
+    cap <- function(s) paste(toupper(substring(s, 1, 1)), {
+      s <- substring(s, 2)
+      if (strict)
+        tolower(s)
+      else s
+    }, sep = "", collapse = " ")
+    sapply(strsplit(s, split = " "), cap, USE.NAMES = !is.null(names(s)))
+  }
+  
+  
   plot_parts <- list(
     geom_indicator(aes(indicator=counts, colour=sample_source, group=sample_source)),
     scale_y_continuous("Feature Density"),

@@ -100,17 +100,17 @@ run=function(self, sample_sources, output_dir, output_formats){
   
   avgs = ddply(data2[data2$total_contacts > 0,], .(sample_source, struct_id, CDR), function(d2){
     contacts = d2$ag_ab_contacts_total[1]/d2$total_contacts
-    print(paste(contacts, d2$total_contacts))
+    #print(paste(contacts, d2$total_contacts))
     perc = contacts
     data.frame(perc = perc)
   })
-  print(head(avgs))
+  #print(head(avgs))
   
   avg_perc = ddply(avgs, .(sample_source, CDR), function(d2){
     
     data.frame(m_perc = mean(d2$perc))
   })
-  print(head(avg_perc))
+  #print(head(avg_perc))
   
   p <- ggplot(data=avg_perc, na.rm = T, aes(x=CDR)) +
     geom_bar(position="dodge", aes(y=m_perc, fill=sample_source), stat='identity') +

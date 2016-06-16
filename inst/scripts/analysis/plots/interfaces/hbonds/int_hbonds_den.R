@@ -52,7 +52,7 @@ run=function(self, sample_sources, output_dir, output_formats){
     hb.struct_id == hb_geom.struct_id
   "
   
-  data = query_sample_sources(sample_sources, sele, char_as_factor=F)
+  data = query_sample_sources(sample_sources, sele)
   #print(sum(data$struct_id==1))
   #print(sum(data$struct_id==2))
   #print(sum(data$struct_id==3))

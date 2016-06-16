@@ -326,9 +326,9 @@ SELECT
   
   
   #NOT (don.HBChemType == 'hbdon_PBA' AND acc.HBChemType == 'hbacc_PBA') 
-  don_data = query_sample_sources(sample_sources, sele_don, char_as_factor=F)
-  acc_data = query_sample_sources(sample_sources, sele_acc, char_as_factor=F)
-  total_cdrs = query_sample_sources(sample_sources, sele_total_cdrs, char_as_factor=F)
+  don_data = query_sample_sources(sample_sources, sele_don)
+  acc_data = query_sample_sources(sample_sources, sele_acc)
+  total_cdrs = query_sample_sources(sample_sources, sele_total_cdrs)
   
   #print(sum(data$struct_id==1))
   #print(sum(data$struct_id==2))

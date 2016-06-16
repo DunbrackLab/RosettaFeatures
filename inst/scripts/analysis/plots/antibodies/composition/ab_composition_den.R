@@ -51,7 +51,7 @@ run=function(self, sample_sources, output_dir, output_formats){
     cdr_metrics
   WHERE CDR LIKE '%Proto%'"
   }
-  data = query_sample_sources(sample_sources, sele, char_as_factor=F)
+  data = query_sample_sources(sample_sources, sele)
  
   plot_parts <- list(
     geom_indicator(aes(indicator=counts, colour=sample_source, group=sample_source)),
@@ -160,7 +160,7 @@ run=function(self, sample_sources, output_dir, output_formats){
   FROM
     ab_metrics"
   
-  data = query_sample_sources(sample_sources, sele, char_as_factor=F)
+  data = query_sample_sources(sample_sources, sele)
   
   #Total CDR residues density
   

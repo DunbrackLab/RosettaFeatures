@@ -27,7 +27,7 @@ run=function(self, sample_sources, output_dir, output_formats){
   FROM
     ab_metrics"
   
-  data = query_sample_sources(sample_sources, sele, char_as_factor=F)
+  data = query_sample_sources(sample_sources, sele)
  
   plot_parts <- list(
     geom_indicator(aes(indicator=counts, colour=sample_source, group=sample_source)),
@@ -180,7 +180,7 @@ run=function(self, sample_sources, output_dir, output_formats){
   }
   
   #CDR Charge Density
-  data = query_sample_sources(sample_sources, sele, char_as_factor=F)
+  data = query_sample_sources(sample_sources, sele)
   dens <- estimate_density_1d(data, c("sample_source", "CDR"), c("charge"))
   p <- ggplot(data=dens, na.rm=T) + parts +
     geom_line(aes(x, y, colour=sample_source), size = 1.2) +

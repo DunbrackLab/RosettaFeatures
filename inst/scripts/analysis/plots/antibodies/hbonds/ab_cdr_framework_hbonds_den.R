@@ -85,8 +85,8 @@ SELECT
     don_res.side == 'side2'
   "
   
-  don_data = query_sample_sources(sample_sources, sele_don, char_as_factor=F)
-  acc_data = query_sample_sources(sample_sources, sele_acc, char_as_factor=F)
+  don_data = query_sample_sources(sample_sources, sele_don)
+  acc_data = query_sample_sources(sample_sources, sele_acc)
   
   
   #print(sum(data$struct_id==1))

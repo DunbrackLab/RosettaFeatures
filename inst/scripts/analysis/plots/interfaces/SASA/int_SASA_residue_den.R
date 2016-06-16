@@ -51,7 +51,7 @@ run=function(self, sample_sources, output_dir, output_formats){
   
   #Density plots
   
-  data = query_sample_sources(sample_sources, sele, char_as_factor=F)
+  data = query_sample_sources(sample_sources, sele)
   ##Overall plots for all residues: Add Side data once we have this.
   
   #Densities

@@ -50,7 +50,7 @@ run=function(self, sample_sources, output_dir, output_formats){
   }
   
   fields = c("ss_sheet_fraction", "ss_helix_fraction", "ss_loop_fraction")
-  data = query_sample_sources(sample_sources, sele, char_as_factor=F)
+  data = query_sample_sources(sample_sources, sele)
   
   for(field in fields){
     fieldSP = unlist(strsplit(field, split="_"))

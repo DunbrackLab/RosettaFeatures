@@ -31,7 +31,7 @@ run=function(self, sample_sources, output_dir, output_formats){
 #  FROM
 #    interfaces"
 #  
-#  data = query_sample_sources(sample_sources, sele, char_as_factor=F)
+#  data = query_sample_sources(sample_sources, sele)
 # 
 
 #  fields = c("dSASA", "dSASA_hphobic", "dSASA_polar")
@@ -94,7 +94,7 @@ run=function(self, sample_sources, output_dir, output_formats){
 
   parts = list(plot_parts, xlab("SASA"))
   
-  data = query_sample_sources(sample_sources, sele, char_as_factor=F)
+  data = query_sample_sources(sample_sources, sele)
   
   data$polar_fraction = (data$dSASA - data$dhSASA)/data$dSASA
   field = "polar_fraction"

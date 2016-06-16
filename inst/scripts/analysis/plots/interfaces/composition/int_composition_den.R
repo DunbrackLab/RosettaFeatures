@@ -65,7 +65,7 @@ run=function(self, sample_sources, output_dir, output_formats){
   }
   
   fields = c("aromatic_fraction")
-  data = query_sample_sources(sample_sources, sele, char_as_factor=F)
+  data = query_sample_sources(sample_sources, sele)
   
   for(field in fields){
     fieldSP = unlist(strsplit(field, split="_"))
@@ -127,7 +127,7 @@ run=function(self, sample_sources, output_dir, output_formats){
     interface_residues.resNum == residues.resNum and
     residues.name3==residue_type.name3
   "
-  res_data = query_sample_sources(sample_sources, sele, char_as_factor=T)
+  res_data = query_sample_sources(sample_sources, sele)
   
   
 

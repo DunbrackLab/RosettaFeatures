@@ -220,9 +220,9 @@ run=function(self, sample_sources, output_dir, output_formats){
       
     }
   
-  don_data = query_sample_sources(sample_sources, sele_don, char_as_factor=F)
-  acc_data = query_sample_sources(sample_sources, sele_acc, char_as_factor=F)
-  total_data = query_sample_sources(sample_sources, sele_total_cdrs, char_as_factor=F)
+  don_data = query_sample_sources(sample_sources, sele_don)
+  acc_data = query_sample_sources(sample_sources, sele_acc)
+  total_data = query_sample_sources(sample_sources, sele_total_cdrs)
   
   #print(sum(data$struct_id==1))
   #print(sum(data$struct_id==2))

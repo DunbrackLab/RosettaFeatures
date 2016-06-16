@@ -30,7 +30,7 @@ run=function(self, sample_sources, output_dir, output_formats){
   FROM
     cdr_metrics"
   
-  data = query_sample_sources(sample_sources, sele, char_as_factor=F)
+  data = query_sample_sources(sample_sources, sele)
  
   plot_field = function(p, plot_id, grid = NULL){
     

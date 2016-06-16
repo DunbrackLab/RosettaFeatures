@@ -61,7 +61,7 @@ run=function(self, sample_sources, output_dir, output_formats){
     save_plots(self, plot_id, sample_sources, output_dir, output_formats)
   }
   
-  data = query_sample_sources(sample_sources, sele, char_as_factor=F)
+  data = query_sample_sources(sample_sources, sele)
 
   #AvgFields
   fields = c("avg_per_residue_dSASA",

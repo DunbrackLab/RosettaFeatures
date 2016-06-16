@@ -61,7 +61,7 @@ run=function(self, sample_sources, output_dir, output_formats){
     interface_residues.struct_id == residues.struct_id and
     interface_residues.resNum == residues.resNum"
   
-  res_data = query_sample_sources(sample_sources, sele, char_as_factor=F)
+  res_data = query_sample_sources(sample_sources, sele)
   
   #Scatterplot of dSASA vs dSASA fraction for each restype.
   #All interfaces - Coloring by Sample Source may be too damn confusing, so change this if need be.

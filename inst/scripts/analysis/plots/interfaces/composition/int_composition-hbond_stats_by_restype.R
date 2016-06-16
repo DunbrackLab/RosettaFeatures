@@ -55,7 +55,7 @@ run=function(self, sample_sources, output_dir, output_formats){
   "
 
   
-  data = query_sample_sources(sample_sources, sele, char_as_factor=F)
+  data = query_sample_sources(sample_sources, sele)
   data$pair_name = paste(data$don_name3, data$acc_name3, sep="-")
   
   plot_parts <- list(

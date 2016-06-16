@@ -22,8 +22,7 @@ query_sample_sources <- function(
 	sample_sources,
 	sele,
 	bind.data = NULL,
-	warn_zero_rows=T,
-	char_as_factor=T
+	warn_zero_rows=T
 	){
 	tryCatch(sele,error=function(e){
 		cat("ERROR: The select statement is not defined.\n")
@@ -64,13 +63,14 @@ query_sample_sources <- function(
 		cat(sele)
 	}
 	
-	if(char_as_factor){
-	  for(col in names(features)){
-	    if(is.character(features[,col])){
-	      features[,col] <- factor(features[,col])
-	    }
-	  }
-	}
+	
+	#if(char_as_factor){
+	#  for(col in names(features)){
+	#    if(is.character(features[,col])){
+	#      features[,col] <- factor(features[,col])
+	#    }
+	#  }
+	#}
 	
 	
 	features
@@ -81,8 +81,7 @@ query_sample_sources_against_ref <- function(
 	sample_sources,
 	sele,
 	sele_args_frame = NULL,
-	warn_zero_rows=T,
-	char_as_factor=T
+	warn_zero_rows=T
 	){
 	tryCatch(sele,error=function(e){
 		cat("ERROR: The select statement ", sele, " is not defined.\n")
@@ -151,14 +150,15 @@ In the returned data.frame the there will be the following columns:
 		cat(sele)
 		return(features)
 	}
-
-	if(char_as_factor){
-	  for(col in names(features)){
-	    if(is.character(features[,col])){
-	      features[,col] <- factor(features[,col])
-	    }
-	  }
-	}
+  
+	
+	#if(char_as_factor){
+	#  for(col in names(features)){
+	#    if(is.character(features[,col])){
+	#      features[,col] <- factor(features[,col])
+	#    }
+	#  }
+	#}
 	data.frame(
 		ref_sample_source = factor(ref_ss$sample_source[1]),
 		new_sample_source = factor(features$sample_source),

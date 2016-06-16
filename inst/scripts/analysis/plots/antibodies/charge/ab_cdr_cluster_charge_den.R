@@ -62,7 +62,7 @@ run=function(self, sample_sources, output_dir, output_formats){
   
   
   #CDR Charge Histogram
-  data = query_sample_sources(sample_sources, sele, char_as_factor=F)
+  data = query_sample_sources(sample_sources, sele)
   data$cdr_length = paste(data$CDR, data$length, sep="_")
   
   avgs = ddply(data, .(sample_source, cdr_length, cluster), function(data) {

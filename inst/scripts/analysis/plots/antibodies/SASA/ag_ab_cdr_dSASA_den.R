@@ -77,7 +77,7 @@ run=function(self, sample_sources, output_dir, output_formats){
     "
   }
   
-  data = query_sample_sources(sample_sources, sele, char_as_factor=F)
+  data = query_sample_sources(sample_sources, sele)
  
   parts <- list(
     geom_indicator(aes(indicator=counts, colour=sample_source, group=sample_source)),

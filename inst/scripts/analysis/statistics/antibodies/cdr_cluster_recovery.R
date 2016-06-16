@@ -73,7 +73,7 @@ run=function(self, sample_sources, output_dir, output_formats){
       ss = sample_sources[i,]
       summary(ss)
       ss_id = as.character(ss$sample_source)
-      result = query_sample_source(ss, sele, char_as_factor=F)
+      result = query_sample_source(ss, sele)
       for (cdr in result$CDR){
         if (! any(current_data$CDR==cdr & current_data$sample_source == ss_id)){
           new_df = data.frame(CDR=as.character(cdr), sample_source = ss_id, normDis_deg=0, fullcluster="NA", stringsAsFactors=F)
@@ -84,7 +84,7 @@ run=function(self, sample_sources, output_dir, output_formats){
     return(current_data)
   }
   #Get input_tags to match natives
-  result = query_sample_source(sample_sources[1,], "SELECT input_tag from structures", char_as_factor=F)
+  result = query_sample_source(sample_sources[1,], "SELECT input_tag from structures")
   native_tags = result$input_tag
   get_and_write_recovery = function(sele, type){
     all_data = adply(native_tags, 1, function(native_tag) {
@@ -98,7 +98,7 @@ run=function(self, sample_sources, output_dir, output_formats){
       match = paste("%", tag, "%", sep="")
       tag_frame = data.frame(like_tag=match, tag=native_tag)
     
-      data = query_sample_sources_against_ref(sample_sources, sele, sele_args_frame=tag_frame, char_as_factor=F) 
+      data = query_sample_sources_against_ref(sample_sources, sele, sele_args_frame=tag_frame) 
       data = create_zero_data(data)
       
       #Type is length or cluster here:
@@ -108,7 +108,7 @@ run=function(self, sample_sources, output_dir, output_formats){
           res_by_cdr = ddply(data_by_ss, "CDR", function(data_by_cdr, type) {
             
             cdr = data_by_cdr$CDR[1]
-            total_data = query_sample_sources(sample_sources, total_sele, sele_args_frame=data.frame(like_tag=match, c=cdr), char_as_factor=F)
+            total_data = query_sample_sources(sample_sources, total_sele, sele_args_frame=data.frame(like_tag=match, c=cdr))
             total_decoys = length(total_data$fullcluster[total_data$sample_source == as.character(data_by_ss$sample_source[1])])
             
             if (length(data_by_cdr$normDis_deg[data_by_cdr$normDis_deg > 0]) == 0){

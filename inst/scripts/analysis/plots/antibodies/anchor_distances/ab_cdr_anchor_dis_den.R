@@ -9,7 +9,7 @@
 
 library(ggplot2)
 library(plyr)
-library(grid)
+
 
 feature_analyses <- c(feature_analyses, methods::new("FeaturesAnalysis",
 id = "ab_anchor_dis",
@@ -20,7 +20,7 @@ run=function(self, sample_sources, output_dir, output_formats){
   
   #First we run on all the interfaces in the database
   
-  if ("FALSE" %in% opt$options$include_cdr4 & "FALSE" %in% opt$options$cdr4_only){
+  #if ("FALSE" %in% opt$options$include_cdr4 & "FALSE" %in% opt$options$cdr4_only){
     sele = "
   SELECT
     anchor_CN_distance,
@@ -28,29 +28,29 @@ run=function(self, sample_sources, output_dir, output_formats){
     length
   FROM
     cdr_metrics where CDR NOT LIKE '%Proto%'"
-  }
+  #}
   
-  if ("TRUE" %in% opt$options$include_cdr4){
-    sele = "
-  SELECT
-    anchor_CN_distance,
-    CDR,
-    length
-  FROM
-    cdr_metrics"
-  } 
+  # if ("TRUE" %in% opt$options$include_cdr4){
+  #   sele = "
+  # SELECT
+  #   anchor_CN_distance,
+  #   CDR,
+  #   length
+  # FROM
+  #   cdr_metrics"
+  # } 
   
-  if ("TRUE" %in% opt$options$cdr4_only){
-    sele = "
-  SELECT
-    anchor_CN_distance,
-    CDR,
-    length
-  FROM
-    cdr_metrics where CDR LIKE '%Proto%'"
-  }
+  # if ("TRUE" %in% opt$options$cdr4_only){
+  #   sele = "
+  # SELECT
+  #   anchor_CN_distance,
+  #   CDR,
+  #   length
+  # FROM
+  #   cdr_metrics where CDR LIKE '%Proto%'"
+  # }
   
-  data = query_sample_sources(sample_sources, sele)
+  data = query_sample_sources(sample_sources, sele, char_as_factor=F)
  
   plot_parts <- list(
     geom_indicator(aes(indicator=counts, colour=sample_source, group=sample_source)),

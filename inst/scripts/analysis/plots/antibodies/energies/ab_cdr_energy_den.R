@@ -20,15 +20,36 @@ run=function(self, sample_sources, output_dir, output_formats){
   
   #First we run on all the interfaces in the database
 
-  
-
-  sele = "
+  if(!(isTRUE(configuration$options$cdr4_only & configuration$option$include_cdr4))){
+    sele = "
   SELECT
     energy,
     CDR
-  FROM
+    FROM
+    cdr_metrics where CDR NOT LIKE '%Proto%'"
+  }
+  
+  if(isTRUE(configuration$options$include_cdr4)){
+    sele = "
+  SELECT
+    energy,
+    CDR
+    FROM
     cdr_metrics
     "
+  }
+  
+  if(isTRUE(configuration$options$cdr4_only)){
+    sele = "
+  SELECT
+    energy,
+    CDR
+    FROM
+    cdr_metrics where CDR LIKE '%Proto%'
+    "
+  }
+
+  
   
   data = query_sample_sources(sample_sources, sele)
  

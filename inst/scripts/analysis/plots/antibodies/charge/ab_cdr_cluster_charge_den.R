@@ -21,7 +21,7 @@ run=function(self, sample_sources, output_dir, output_formats){
   #First we run on all the interfaces in the database
 
   
-
+  if(!(isTRUE(configuration$options$cdr4_only & configuration$option$include_cdr4))){
   sele = "
   SELECT 
     cdr_metrics.charge as charge,
@@ -32,9 +32,44 @@ run=function(self, sample_sources, output_dir, output_formats){
     cdr_metrics,
     cdr_clusters
    WHERE
+     CDR NOT LIKE '%Proto%'
      cdr_clusters.struct_id = cdr_metrics.struct_id AND
      cdr_clusters.CDR = cdr_metrics.CDR
   "
+  }
+  
+  if(isTRUE(configuration$options$include_cdr4)){
+    sele = "
+    SELECT 
+    cdr_metrics.charge as charge,
+    cdr_metrics.CDR as CDR,
+    cdr_metrics.length as length,
+    cdr_clusters.fullcluster as cluster
+    FROM
+    cdr_metrics,
+    cdr_clusters
+    WHERE
+    cdr_clusters.struct_id = cdr_metrics.struct_id AND
+    cdr_clusters.CDR = cdr_metrics.CDR
+    "
+  }
+  
+  if(isTRUE(configuration$options$cdr4_only)){
+    sele = "
+    SELECT 
+    cdr_metrics.charge as charge,
+    cdr_metrics.CDR as CDR,
+    cdr_metrics.length as length,
+    cdr_clusters.fullcluster as cluster
+    FROM
+    cdr_metrics,
+    cdr_clusters
+    WHERE
+    CDR LIKE '%Proto%'
+    cdr_clusters.struct_id = cdr_metrics.struct_id AND
+    cdr_clusters.CDR = cdr_metrics.CDR
+    "
+  }
   
   plot_parts <- list(
     geom_indicator(aes(indicator=counts, colour=sample_source, group=sample_source)),

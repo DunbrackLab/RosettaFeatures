@@ -21,7 +21,7 @@ run=function(self, sample_sources, output_dir, output_formats){
   #First we run on all the interfaces in the database
 
   
-  #if ("FALSE" %in% opt$options$include_cdr4 & "FALSE" %in% opt$options$cdr4_only){
+  if(!(isTRUE(configuration$options$cdr4_only & configuration$option$include_cdr4))){
   sele = "
   SELECT
     SASA,
@@ -32,29 +32,29 @@ run=function(self, sample_sources, output_dir, output_formats){
   WHERE
   CDR NOT LIKE '%Proto%'
     "
-  #}
+  }
   
-  # if ("TRUE" %in% opt$options$include_cdr4){
-  #   sele = "
-  # SELECT
-  #   SASA,
-  #   CDR,
-  #   length
-  # FROM
-  #   cdr_metrics"
-  # }
+   if(isTRUE(configuration$options$include_cdr4)){
+     sele = "
+   SELECT
+     SASA,
+     CDR,
+     length
+   FROM
+     cdr_metrics"
+   }
   
-  # if ("TRUE" %in% opt$options$cdr4_only){
-  #   sele = "
-  # SELECT
-  #   SASA,
-  #   CDR,
-  #   length
-  # FROM
-  #   cdr_metrics
-  # WHERE
-  # CDR LIKE '%Proto%'"
-  # }
+   if(isTRUE(configuration$options$cdr4_only)){
+     sele = "
+   SELECT
+     SASA,
+     CDR,
+     length
+   FROM
+     cdr_metrics
+   WHERE
+   CDR LIKE '%Proto%'"
+   }
   
   data = query_sample_sources(sample_sources, sele)
  

@@ -21,14 +21,40 @@ run=function(self, sample_sources, output_dir, output_formats){
   #First we run on all the interfaces in the database
 
   
-
+  if(!(isTRUE(configuration$options$cdr4_only & configuration$option$include_cdr4))){
   sele = "
   SELECT
     length,
     CDR,
     struct_id
   FROM
-    cdr_metrics"
+    cdr_metrics
+  WHERE
+    CDR NOT LIKE '%Proto%'"
+  }
+  
+  if(isTRUE(configuration$options$include_cdr4)){
+  sele = "
+  SELECT
+  length,
+  CDR,
+  struct_id
+  FROM
+  cdr_metrics"
+  }
+  
+  if(isTRUE(configuration$options$cdr4_only)){
+  sele = "
+  SELECT
+  length,
+  CDR,
+  struct_id
+  FROM
+  cdr_metrics
+  WHERE
+  CDR LIKE '%Proto%'"
+  }
+  
   
   data = query_sample_sources(sample_sources, sele)
  
@@ -54,7 +80,18 @@ run=function(self, sample_sources, output_dir, output_formats){
   #This does not assume 1 antibody per struct_id, which is currently how it works.  
   #It does assumes all CDRs are present, which is also how AntibodyInfo currently works.
   print("Calculating length pairs..")
+  
+  if(!(isTRUE(configuration$options$cdr4_only & configuration$option$include_cdr4))){
   cdrs = c("L1", "L2", "L3", "H1", "H2", "H3")
+  }
+  
+  if(isTRUE(configuration$options$include_cdr4)){
+  cdrs = c("L1", "L2", "L3", "L4", "H1", "H2", "H3", "H4") 
+  }
+  
+  if(isTRUE(configuration$options$cdr4_only)){
+  cdrs = c("L4", "H4")
+  }
   #cdrs = c("L1", "L3", "H3") 
   
   data <- ddply(data, .(struct_id, sample_source), function(d2){

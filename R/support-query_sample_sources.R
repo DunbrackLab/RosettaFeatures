@@ -72,7 +72,7 @@ query_sample_sources <- function(
 	#  }
 	#}
 	
-	tail(features)
+	cat(tail(features))
 	features
 }
 

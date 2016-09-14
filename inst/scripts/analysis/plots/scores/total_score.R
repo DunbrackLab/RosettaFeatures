@@ -77,7 +77,7 @@ p <- ggplot(data=avgs ) +
   theme_bw() +
   ggtitle("Average Score") +
   ylab("REU") +
-  scale_x_discrete(labels=function(x) abbreviate(x, minlength=12))
+  scale_x_discrete(labels=function(x) abbreviate(x, minlength=17))
 save_plots(self, "avg_total_score", sample_sources, output_dir, output_formats)
   
 #Avg Top 10 Scoring
@@ -86,7 +86,7 @@ p <- ggplot(data=avgs ) +
   theme_bw() +
   ggtitle("Average Best 10 Score") +
   ylab("REU") +
-  scale_x_discrete(labels=function(x) abbreviate(x, minlength=12))
+  scale_x_discrete(labels=function(x) abbreviate(x, minlength=17))
 save_plots(self, "avg_top_10_total_score", sample_sources, output_dir, output_formats)
 
 #Top Scoring
@@ -95,7 +95,7 @@ p <- ggplot(data=avgs ) +
   theme_bw() +
   ggtitle("Best Score") +
   ylab("REU") +
-  scale_x_discrete(labels=function(x) abbreviate(x, minlength=12))
+  scale_x_discrete(labels=function(x) abbreviate(x, minlength=17))
 save_plots(self, "best_total_score", sample_sources, output_dir, output_formats)
 
 })) # end FeaturesAnalysis

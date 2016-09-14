@@ -107,7 +107,7 @@ run=function(self, sample_sources, output_dir, output_formats){
     theme_bw() +
     ggtitle("Average Interface dG") +
     ylab("REU") +
-    scale_x_discrete(labels=function(x) abbreviate(x, minlength=12))
+    scale_x_discrete(labels=function(x) abbreviate(x, minlength=17))
   plot_field(p, "avg_dG_by_interface", grid=interface ~ .)
   
   #Average Top 10
@@ -116,7 +116,7 @@ run=function(self, sample_sources, output_dir, output_formats){
     theme_bw() +
     ggtitle("Average Best 10 Interface dG") +
     ylab("REU") +
-    scale_x_discrete(labels=function(x) abbreviate(x, minlength=12))
+    scale_x_discrete(labels=function(x) abbreviate(x, minlength=17))
   plot_field(p, "avg_dG_top_10_by_interface", grid=interface ~ .)
   
   #Best
@@ -125,6 +125,6 @@ run=function(self, sample_sources, output_dir, output_formats){
     theme_bw() +
     ggtitle("Top Interface dG") +
     ylab("REU") +
-    scale_x_discrete(labels=function(x) abbreviate(x, minlength=12))
+    scale_x_discrete(labels=function(x) abbreviate(x, minlength=17))
   plot_field(p, "dG_top_by_interface", grid=interface ~ .)
 })) # end FeaturesAnalysis

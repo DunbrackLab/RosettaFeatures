@@ -56,6 +56,7 @@ f <- ddply(data, .(sample_source), function(d2){
 })
   
 dens <- estimate_density_1d(f, c("sample_source"), c("total_score"))
+print(dens)
 
 plot_id <- "total_score_top_10"
 p <- ggplot(data=dens) + theme_bw() +

@@ -71,10 +71,6 @@ query_sample_sources <- function(
 	#    }
 	#  }
 	#}
-	plyr::a_ply(features$sample_source, 1, function( ss ){
-	  cat(ss)
-	})
-	
 	features
 }
 

@@ -56,7 +56,6 @@ f <- ddply(data, .(sample_source), function(d2){
 })
   
 dens <- estimate_density_1d(f, c("sample_source"), c("total_score"))
-print(dens)
 
 plot_id <- "total_score_top_10"
 p <- ggplot(data=dens) + theme_bw() +
@@ -78,7 +77,7 @@ p <- ggplot(data=avgs ) +
   theme_bw() +
   ggtitle("Average Score") +
   ylab("REU") +
-  scale_x_discrete(labels = abbreviate)
+  scale_x_discrete(labels=function(x) abbreviate(x, minlength=12))
 save_plots(self, "avg_total_score", sample_sources, output_dir, output_formats)
   
 #Avg Top 10 Scoring
@@ -87,7 +86,7 @@ p <- ggplot(data=avgs ) +
   theme_bw() +
   ggtitle("Average Best 10 Score") +
   ylab("REU") +
-  scale_x_discrete(labels = abbreviate)
+  scale_x_discrete(labels=function(x) abbreviate(x, minlength=12))
 save_plots(self, "avg_top_10_total_score", sample_sources, output_dir, output_formats)
 
 #Top Scoring
@@ -96,7 +95,7 @@ p <- ggplot(data=avgs ) +
   theme_bw() +
   ggtitle("Best Score") +
   ylab("REU") +
-  scale_x_discrete(labels = abbreviate)
+  scale_x_discrete(labels=function(x) abbreviate(x, minlength=12))
 save_plots(self, "best_total_score", sample_sources, output_dir, output_formats)
 
 })) # end FeaturesAnalysis

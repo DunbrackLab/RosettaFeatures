@@ -170,24 +170,24 @@ run=function(self, sample_sources, output_dir, output_formats){
     geom_bar(position="dodge", stat='identity', aes(x = sample_source, y= m , fill=sample_source)) +
     theme_bw() +
     ggtitle(paste("Buried", field,"Average", sep=" "))+
-    scale_x_discrete(labels=function(x) abbreviate(x, minlength=12))
-  plot_field(p, "avg_sides_by_all", grid=side ~ .)
+    scale_x_discrete(labels=function(x) abbreviate(x, minlength=17))
+  plot_field(p, paste("avg_sides_by_all", field, sep = "_"), grid=side ~ .)
   
   #Average Top 10
   p <- ggplot(data=avgs ) + 
     geom_bar(position="dodge", stat='identity', aes(x = sample_source, y= m_top10 , fill=sample_source)) +
     theme_bw() +
     ggtitle(paste("Buried", field, "Average Best 10",sep=" ")) +
-    scale_x_discrete(labels=function(x) abbreviate(x, minlength=12))
-  plot_field(p, "avg_sides_top_10_by_all", grid=side ~ .)
+    scale_x_discrete(labels=function(x) abbreviate(x, minlength=17))
+  plot_field(p, paste("avg_sides_top_10_by_all", field, sep="_"), grid=side ~ .)
   
   #Best
   p <- ggplot(data=avgs ) + 
     geom_bar(position="dodge", stat='identity', aes(x = sample_source, y= top , fill=sample_source)) +
     theme_bw() +
     ggtitle(paste("Buried", field, "top", sep=" ")) +
-    scale_x_discrete(labels=function(x) abbreviate(x, minlength=12))
-  plot_field(p, "sides_top_by_all", grid=side ~ .)
+    scale_x_discrete(labels=function(x) abbreviate(x, minlength=17))
+  plot_field(p, paste("sides_top_by_all", field, sep = "_"), grid=side ~ .)
   
   avgs <- ddply(data, .(sample_source, side, field, interface), function(d2){
     data.frame(m = mean(d2[,field]), std_dev = sd(d2[,field]), m_top10 = mean(d2[1:10,field]), std_dev_top_10 = sd(d2[1:10,field]), top = d2[1,field])
@@ -197,28 +197,30 @@ run=function(self, sample_sources, output_dir, output_formats){
     geom_bar(position="dodge", stat='identity', aes(x = sample_source, y= m , fill=sample_source)) +
     theme_bw() +
     ggtitle(paste("Buried", field,"Average", sep=" ")) +
-    scale_x_discrete(labels=function(x) abbreviate(x, minlength=12))
-  plot_field(p, "avg_sides_by_interface", grid=side ~ interface)
+    scale_x_discrete(labels=function(x) abbreviate(x, minlength=17))
+  plot_field(p, paste("avg_sides_by_interface", field, sep="_"), grid=side ~ interface)
   
   #Average Top 10
   p <- ggplot(data=avgs ) + 
     geom_bar(position="dodge", stat='identity', aes(x = sample_source, y= m_top10 , fill=sample_source)) +
     theme_bw() +
     ggtitle(paste("Buried", field, "Average Best 10",sep=" ")) +
-    scale_x_discrete(labels=function(x) abbreviate(x, minlength=12)) +
+    scale_x_discrete(labels=function(x) abbreviate(x, minlength=17)) +
     ylab(field)
-  plot_field(p, "avg_sides_top_10_by_interface", grid=side ~ interface)
+  plot_field(p, paste("avg_sides_top_10_by_interface", field, sep="_"), grid=side ~ interface)
   
   #Best
   p <- ggplot(data=avgs ) + 
     geom_bar(position="dodge", stat='identity', aes(x = sample_source, y= top , fill=sample_source)) +
     theme_bw() +
     ggtitle(paste("Buried", field, "top", sep=" ")) +
-    scale_x_discrete(labels=function(x) abbreviate(x, minlength=12)) +
+    scale_x_discrete(labels=function(x) abbreviate(x, minlength=17)) +
     ylab(field)
-  plot_field(p, "sides_top_by_interface", grid=side ~ interface)
+  plot_field(p, paste("sides_top_by_interface", field, sep = "_"), grid=side ~ interface)
     
-  }
+  } #End each side
+  
+  
   #Fractions
   field = "aromatic_dSASA_fraction"
   parts = list(plot_parts, scale_x_continuous("fraction", limit=c(0, 1.0)))

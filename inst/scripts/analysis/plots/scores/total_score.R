@@ -75,7 +75,7 @@ p <- ggplot(data=avgs ) +
   geom_bar(position="dodge", stat='identity', aes(x = sample_source, y= m , fill=sample_source)) +
   #geom_errorbar(aes(ymin = m-std_dev, ymax=m+std_dev) +
   theme_bw() +
-  ggtitle("Average Score") +
+  ggtitle("Average Total Score") +
   ylab("REU") +
   scale_x_discrete(labels=function(x) abbreviate(x, minlength=17))
 save_plots(self, "avg_total_score", sample_sources, output_dir, output_formats)

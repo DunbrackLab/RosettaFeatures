@@ -71,7 +71,6 @@ query_sample_sources <- function(
 	#    }
 	#  }
 	#}
-	cat("ordering: ")
 	plyr::a_ply(features$sample_source, 1, function( ss ){
 	  cat(ss)
 	})

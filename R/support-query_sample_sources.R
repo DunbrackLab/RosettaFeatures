@@ -27,7 +27,7 @@ query_sample_sources <- function(
 	tryCatch(sele,error=function(e){
 		cat("ERROR: The select statement is not defined.\n")
 	})
-	features <- plyr::ddply(sample_sources, c("sample_source"), function(ss){
+	features <- plyr::adply(sample_sources, 1, function(ss){
 		tryCatch(c(ss),error=function(e){
 			cat("ERROR: The specified sample source is not defined.\n")
 		})

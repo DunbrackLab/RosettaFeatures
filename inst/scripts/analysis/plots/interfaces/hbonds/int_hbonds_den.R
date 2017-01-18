@@ -117,7 +117,7 @@ run=function(self, sample_sources, output_dir, output_formats){
     df = data.frame(n=n)
   })
   
-  #print(head(hbond_counts))
+  print(head(hbond_counts))
   field = "n"
   group = c("sample_source")
   dens <- estimate_density_1d(hbond_counts,  group, field)

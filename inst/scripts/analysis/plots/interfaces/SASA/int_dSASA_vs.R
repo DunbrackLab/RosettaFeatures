@@ -91,7 +91,8 @@ run=function(self, sample_sources, output_dir, output_formats){
     
     #dSASA vs dG
     p <- ggplot(data=int_data[int_data$dG<=5000 & int_data$dG>-5000,], aes(x = f, y = dG, colour=sample_source)) + parts +
-      ggtitle(paste(f,"vs dG")) +
+      ggtitle(paste(f,"vs dG"))
+    
     plot_field(p, paste(f, "vs_dG_by_all", sep="_"))
     plot_field(p, paste(f, "vs_dG_by_interface", sep="_"), grid=interface ~ .)
   

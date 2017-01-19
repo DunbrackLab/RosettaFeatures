@@ -134,43 +134,14 @@ run=function(self, sample_sources, output_dir, output_formats){
   
   
 
-  ##Histogram - only plot residues that have a dSASA fraction > 5 % -  change this for sidechains once we have that data
-
-  ##### Typical way is not working, so we will have to do it manually. #####
-  
-  #Restype Composition - Classical, not working!
-#  p <- ggplot(data=res_data, aes(x=restype1)) + 
-#    geom_bar(position="dodge", aes(y = ..density.., fill=sample_source), binwidth=1)+ 
-#    theme_bw() +
-#    ggtitle("Interface ResType Composition") +
-#    scale_y_continuous(label=percent)
-#  plot_field(p, "restype_composition_by_all_test") 
-#  plot_field(p, "restype_composition_by_interface_test", grid=interface ~ .)
-    
-  get_percent <- function(d) {
-    d_per <- ddply(d, .(sample_source, interface, input_tag), function(per_struct_id){
-      d_per_restype <- ddply(per_struct_id, .(restype1), function(per_restype){
-        #print(head(per_restype))
-        perc = length(per_restype$restype1)/length(per_struct_id$input_tag) 
-        df = data.frame(perc = perc)
-      })
-    })
-    d_per
-  }
-  
-  d = get_percent(data)
-  print.default(d)
-  
-  #Restype Composition
-  
-  p <- ggplot(data=d, aes(x=restype1)) + 
-    geom_bar(position="dodge", stat="identity", aes(y=perc, x=restype1,fill=sample_source))+ 
+  p <- ggplot(data=res_data, aes(x=restype1, y = ..density.., fill=sample_source)) + 
+    geom_histogram(position="dodge", binwidth=1)+ 
     theme_bw() +
-    ggtitle("Interface ResType Composition") +
-    #scale_y_continuous(label="percent") +
-    ylab("% of Sample Source")
+    ggtitle("Interface ResType Composition") 
+  
   plot_field(p, "restype_composition_by_all") 
   plot_field(p, "restype_composition_by_interface", grid=interface ~ .)
+    
       
       
     

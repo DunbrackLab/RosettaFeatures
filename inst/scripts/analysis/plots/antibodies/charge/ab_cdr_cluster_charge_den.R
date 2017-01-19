@@ -94,7 +94,7 @@ run=function(self, sample_sources, output_dir, output_formats){
           geom_indicator(aes(indicator=counts, colour=sample_source, group=sample_source)) +
           ggtitle(paste("CDR Charge", cluster)) +
           xlab("Charge") +
-          scale_y_continuous("Feature Density")
+          #Zscale_y_continuous("Feature Density")
        plot_field(p, paste("cdr_charge_den", cluster, sep="_"))
     }
     
@@ -103,7 +103,7 @@ run=function(self, sample_sources, output_dir, output_formats){
     p <- ggplot(data=clus_data) +
       theme_bw() +
       ggtitle(paste("CDR Charge", cluster)) +
-      scale_y_continuous(label=percent) +
+      #scale_y_continuous(label="percent") +
       ylab("% of Sample Source")
   plot_field(p, paste("cdr_charge_hist", cluster, sep="_"))
     

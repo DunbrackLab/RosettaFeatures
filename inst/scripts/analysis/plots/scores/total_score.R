@@ -33,9 +33,8 @@ WHERE
   structure_scores.score_type_id = score_types.score_type_id 
 ORDER BY score_value;"
 
-data <- query_sample_sources(sample_sources, sele)
 
-print(summary(data))
+data <- query_sample_sources(sample_sources, sele)
 
 dens <- estimate_density_1d(
   data = data,
@@ -44,7 +43,7 @@ dens <- estimate_density_1d(
 
 plot_id <- "total_score"
 p <- ggplot(data=dens) + theme_bw() +
-	geom_line(aes(x=x, y=y, colour=sample_source), size=1.4) +
+	geom_line(aes(x, y, colour=sample_source), size=1.4) +
 	geom_indicator(aes(indicator=counts, colour=sample_source, group=sample_source)) +
 	ggtitle("Rosetta Structure Score") +
 	labs(x="Rosetta Energy Units") +
@@ -52,16 +51,16 @@ p <- ggplot(data=dens) + theme_bw() +
 save_plots(self, plot_id, sample_sources, output_dir, output_formats)
 
 f <- ddply(data, .(sample_source), function(d2){
-  data.frame(total_score = d2[1:10,]$total_score)
+  data.frame(total_score = d2[1:20,]$total_score)
 })
-  
-dens <- estimate_density_1d(f, c("sample_source"), c("total_score"))
 
-plot_id <- "total_score_top_10"
+dens <- estimate_density_1d(f, ids = c("sample_source"), variable = "total_score")
+
+plot_id <- "total_score_top_20"
 p <- ggplot(data=dens) + theme_bw() +
-  geom_line(aes(x=x, y=y, colour=sample_source), size=1.4) +
+  geom_line(aes(x, y, colour=sample_source), size=1.4) +
 	geom_indicator(aes(indicator=counts, colour=sample_source, group=sample_source)) +
-	ggtitle("Rosetta Structure Score - Top 10") +
+	ggtitle("Rosetta Structure Score - Top 20") +
 	labs(x="Rosetta Energy Units") +
 	scale_y_continuous("FeatureDensity", breaks=c(0, .3, .6))
 save_plots(self, plot_id, sample_sources, output_dir, output_formats)
@@ -70,6 +69,7 @@ save_plots(self, plot_id, sample_sources, output_dir, output_formats)
 avgs <- ddply(data, .(sample_source), function(d2){
   data.frame(m = mean(d2$total_score), std_dev = sd(d2$total_score), m_top10 = mean(d2[1:10,]$total_score), std_dev_top_10 = sd(d2[1:10,]$total_score), top = d2[1,]$total_score)
 })
+
 print(avgs)
 p <- ggplot(data=avgs ) + 
   geom_bar(position="dodge", stat='identity', aes(x = sample_source, y= m , fill=sample_source)) +

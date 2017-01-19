@@ -65,7 +65,7 @@ run=function(self, sample_sources, output_dir, output_formats){
     geom_bar(position="dodge", stat="identity", aes(x=kink_type, y= percent, fill=sample_source)) +
     theme_bw() +
     ggtitle("Kink Type Comparison") +
-    scale_y_continuous(label = "percent") +
+    #scale_y_continuous(label = "percent") +
     xlab("kink type")
   plot_field(p, "kink_type_hist")
   

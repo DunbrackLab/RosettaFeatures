@@ -26,6 +26,7 @@ run=function(self, sample_sources, output_dir, output_formats){
     hb.energy as energy,
     don_res.interface as interface,
     don_res.struct_id as struct_id,
+    structures.input_tag as input_tag,
     hb_geom.AHdist as dis
   FROM
     interface_residues AS don_res,
@@ -33,7 +34,8 @@ run=function(self, sample_sources, output_dir, output_formats){
     hbond_sites AS don,
     hbond_sites AS acc,
     hbonds AS hb,
-    hbond_geom_coords as hb_geom
+    hbond_geom_coords as hb_geom,
+    structures
   WHERE
     ((don_res.side== 'side1' AND
     acc_res.side == 'side2') OR
@@ -49,10 +51,12 @@ run=function(self, sample_sources, output_dir, output_formats){
     acc_res.struct_id == acc.struct_id AND
     acc.struct_id == don.struct_id AND
     don.struct_id == hb.struct_id AND
-    hb.struct_id == hb_geom.struct_id
+    hb.struct_id == hb_geom.struct_id AND
+    don_res.struct_id == structures.struct_id
   "
   
   data = query_sample_sources(sample_sources, sele)
+    
   #print(sum(data$struct_id==1))
   #print(sum(data$struct_id==2))
   #print(sum(data$struct_id==3))
@@ -111,13 +115,12 @@ run=function(self, sample_sources, output_dir, output_formats){
   
   #Hbonds/model or per interface
   #There is probably a better way to do this.
-  
-  hbond_counts <- ddply(data, .(interface, sample_source, struct_id), function(int_data){
-    n = length(int_data$energy > 0)
-    df = data.frame(n=n)
+  #print.default(data)
+  hbond_counts <- ddply(data, .(interface, sample_source, input_tag), function(int_data){
+    data.frame(n = length(int_data$energy > 0))
+    #df = data.frame(n=n)
   })
   
-  print(head(hbond_counts))
   field = "n"
   group = c("sample_source")
   dens <- estimate_density_1d(hbond_counts,  group, field)
@@ -135,19 +138,25 @@ run=function(self, sample_sources, output_dir, output_formats){
     ggtitle("Cross Interface Hydrogen Bonds")
   plot_field(p, "hbond_den_by_interface",grid=~interface)
   
+
+  avgs <- ddply(hbond_counts, .(sample_source), function(d2){
+    std_dev = sd(d2$n)
+    m = mean(d2$n)
+    data.frame(m = m, std_dev = std_dev, ymin=m-std_dev, ymax=m+std_dev)
+  })
   
-  #Histogram
-  p <- ggplot(data=hbond_counts, na.rm=T) + 
-    geom_bar(aes(x=n, y = ..density.. , fill=sample_source), position="dodge", binwidth=1) +
-    scale_y_continuous(label="percent") +
-    xlab("hbonds") +
-    ggtitle("Average Cross Interface Hydrogen Bonds")
-  plot_field(p, "hbond_hist_by_all")
+  dodge <- position_dodge(width=0.9)
   
-  p <- ggplot(data=hbond_counts, na.rm=T) + 
-    geom_bar(aes(x=n, y = ..density.. , fill=sample_source), position="dodge", binwidth=1) +
-    scale_y_continuous(label="percent") +
+  
+  #Averages
+  p <- ggplot(data=avgs, (x = sample_source, y= m , fill=sample_source, ymax=ymax, ymin=ymin) ) + 
+    geom_bar(position="dodge", stat='identity', ) +
+    geom_errorbar(position=dodge, width=0.25)
+    theme_bw() +
+    ggtitle("Average Cross Interface Hydrogen Bonds") +
     xlab("hbonds") +
-    ggtitle("Average Cross Interface Hydrogen Bonds")
-  plot_field(p, "hbond_hist_by_interface", grid=~interface)
+    #scale_x_discrete(labels=function(x) abbreviate(x, minlength=17))
+  save_plots(self, "avg_hbonds_by_all", sample_sources, output_dir, output_formats)
+  
+  
 })) # end FeaturesAnalysis

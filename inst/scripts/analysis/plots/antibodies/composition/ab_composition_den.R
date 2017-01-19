@@ -86,7 +86,7 @@ run=function(self, sample_sources, output_dir, output_formats){
   dens <- estimate_density_1d(data,  group, field)
   p <- ggplot(data=dens, na.rm=T) + parts +
     geom_line(aes(x, y, colour=sample_source), size=1.2) +
-    scale_x_continuous("", breaks = seq(min(data$length), max(data$length), 4))
+    #scale_x_continuous("", breaks = seq(min(data$length), max(data$length), 4))
     ggtitle("CDR Lengths")
   plot_field_wrap(p, "cdr_lengths_den",grid= ~ CDR)
   

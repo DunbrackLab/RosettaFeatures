@@ -36,6 +36,13 @@ run=function(self, sample_sources, output_dir, output_formats){
     scale_y_continuous("Feature Density"),
     theme_bw())
 
+  capwords <- function(s, strict = FALSE) {
+    cap <- function(s) paste(toupper(substring(s,1,1)),
+                             {s <- substring(s,2); if(strict) tolower(s) else s},
+                             sep = "", collapse = " " )
+    sapply(strsplit(s, split = " "), cap, USE.NAMES = !is.null(names(s)))
+  }
+  
   plot_field = function(p, plot_id, grid = NULL, ssLegend=T){
     
     if (! is.null(grid)){

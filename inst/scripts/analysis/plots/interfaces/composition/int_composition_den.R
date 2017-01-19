@@ -117,15 +117,18 @@ run=function(self, sample_sources, output_dir, output_formats){
     interface_residues.dG as dG,
     
     interface_residues.relative_dSASA_fraction as dSASA_fraction,
-    interface_residues.struct_id as struct_id
+    interface_residues.struct_id as struct_id,
+    structures.input_tag as input_tag
   FROM
     residues,
     interface_residues,
-    residue_type
+    residue_type,
+    structures
   WHERE
     interface_residues.struct_id == residues.struct_id and
     interface_residues.resNum == residues.resNum and
-    residues.name3==residue_type.name3
+    residues.name3==residue_type.name3 and
+    interface_residues.struct_id == structures.struct_id
   "
   res_data = query_sample_sources(sample_sources, sele)
   
@@ -145,24 +148,25 @@ run=function(self, sample_sources, output_dir, output_formats){
 #  plot_field(p, "restype_composition_by_interface_test", grid=interface ~ .)
     
   get_percent <- function(d) {
-    d_per <- ddply(d, .(sample_source, interface, struct_id), function(per_struct_id){
+    d_per <- ddply(d, .(sample_source, interface, input_tag), function(per_struct_id){
       d_per_restype <- ddply(per_struct_id, .(restype1), function(per_restype){
         #print(head(per_restype))
-        perc = length(per_restype$restype1)/length(per_struct_id$struct_id) 
+        perc = length(per_restype$restype1)/length(per_struct_id$input_tag) 
         df = data.frame(perc = perc)
       })
     })
     d_per
   }
     
-        
+  print.default(d)
+  
   #Restype Composition
   
-  p <- ggplot(data=get_percent(res_data), aes(x=restype1)) + 
-    geom_bar(position="dodge", stat="identity", aes(y=perc, fill=sample_source))+ 
+  p <- ggplot(data=d, aes(x=restype1)) + 
+    geom_bar(position="dodge", stat="identity", aes(y=perc, x=restype1,fill=sample_source))+ 
     theme_bw() +
     ggtitle("Interface ResType Composition") +
-    scale_y_continuous(label="percent") +
+    #scale_y_continuous(label="percent") +
     ylab("% of Sample Source")
   plot_field(p, "restype_composition_by_all") 
   plot_field(p, "restype_composition_by_interface", grid=interface ~ .)

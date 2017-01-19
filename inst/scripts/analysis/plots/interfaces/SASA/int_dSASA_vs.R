@@ -91,9 +91,7 @@ run=function(self, sample_sources, output_dir, output_formats){
     
     #dSASA vs dG
     p <- ggplot(data=int_data[int_data$dG<=5000 & int_data$dG>-5000,], aes(x = f, y = dG, colour=sample_source)) + parts +
-      ggtitle(paste(field,"vs dG")) +
-      scale_x_continuous("SASA") +
-      scale_y_continuous("REU")
+      ggtitle(paste(f,"vs dG")) +
     plot_field(p, paste(f, "vs_dG_by_all", sep="_"))
     plot_field(p, paste(f, "vs_dG_by_interface", sep="_"), grid=interface ~ .)
   
@@ -119,8 +117,6 @@ run=function(self, sample_sources, output_dir, output_formats){
     field = c("dSASA")
     p <- ggplot(data = data, aes(x = dSASA, y = e_density, colour=sample_source)) + parts +
       ggtitle(paste(field, "vs Interface energy density")) +
-      scale_x_continuous("dSASA") +
-      scale_y_continuous("dG/dSASA")
     plot_field(p, paste("control", field, "vs_energy_density", sep="_"), grid=side ~ .)
   
 #  #dhSASA vs dpSASA
@@ -133,13 +129,9 @@ run=function(self, sample_sources, output_dir, output_formats){
   #Control -  Should be flat?
   p <- ggplot(data = data, aes(y = dSASA_bb, x = dSASA_sc, colour=sample_source)) + parts +
     ggtitle("dSASA_sc vs dSASA_bb") +
-    scale_x_continuous("Sidechain dSASA") +
-    scale_y_continuous("Backbone dSASA")
   plot_field(p, "control_dSASA_sc_vs_dSASA_bb", grid=side ~ .)
   
   p <- ggplot(data = data, aes(y = dhSASA_sc, x = dhSASA_bb, colour=sample_source)) + parts +
     ggtitle("dhSASA_sc vs dhSASA_bb") +
-    scale_y_continuous("Sidechain dhSASA") +
-    scale_x_continuous("Backbone dhSASA")
   plot_field(p, "control_dhSASA_sc_vs_dhSASA_bb", grid=side ~ .)
 })) # end FeaturesAnalysis

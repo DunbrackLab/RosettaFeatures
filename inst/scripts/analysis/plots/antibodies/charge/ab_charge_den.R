@@ -66,7 +66,7 @@ run=function(self, sample_sources, output_dir, output_formats){
   dens <- estimate_density_1d(data,  group, field)
   p <- ggplot(data=dens, na.rm=T) + parts +
     geom_line(aes(x, y, colour=sample_source), size=1.2) +
-    scale_x_continuous("charge", breaks = seq(min(data$net_charge), max(data$net_charge), 2)) +
+    #scale_x_continuous("charge", breaks = seq(min(data$net_charge), max(data$net_charge), 2)) +
     ggtitle("Antibody Net Charge")
   plot_field(p, "net_charge_den")
   
@@ -79,10 +79,10 @@ run=function(self, sample_sources, output_dir, output_formats){
   p <- ggplot(data=perc ) + 
     geom_bar(position="dodge", stat='identity', aes(x = net_charge, y= perc , fill=sample_source)) +
     theme_bw() +
-    scale_x_continuous("charge", breaks = seq(min(perc$net_charge), max(perc$net_charge), 2)) +
+    #scale_x_continuous("charge", breaks = seq(min(perc$net_charge), max(perc$net_charge), 2)) +
     ggtitle("Antibody Net Charge") +
     ylab("% of Sample Source") +
-    scale_y_continuous(label="percent")
+    #scale_y_continuous(label="percent")
     #scale_x_continuous("restype") +
     #scale_y_continuous("n")
   plot_field(p, "net_charge_hist")
@@ -111,7 +111,7 @@ run=function(self, sample_sources, output_dir, output_formats){
   dens <- estimate_density_1d(data,  group, field)
   p <- ggplot(data=dens, na.rm=T) + parts +
     geom_line(aes(x, y, colour=sample_source), size=1.2) +
-    scale_x_continuous("charge", breaks = seq(min(data$paratope_charge), max(data$paratope_charge), 2)) +
+    #scale_x_continuous("charge", breaks = seq(min(data$paratope_charge), max(data$paratope_charge), 2)) +
     ggtitle("Paratope Net Charge")
   plot_field(p, "paratope_charge_den")
   
@@ -204,7 +204,7 @@ run=function(self, sample_sources, output_dir, output_formats){
       theme_bw() +
       #scale_x_continuous("charge",  breaks = get_charge_seq(perc, 1)) +
       ggtitle("CDR Charge") +
-      scale_y_continuous("charge", label="percent") +
+      #scale_y_continuous("charge", label="percent") +
       ylab("% of Sample Source")
   plot_field_wrap(p, "cdr_charge_hist", ~ CDR)
     

@@ -157,7 +157,8 @@ run=function(self, sample_sources, output_dir, output_formats){
     })
     d_per
   }
-    
+  
+  d = get_percent(data)
   print.default(d)
   
   #Restype Composition

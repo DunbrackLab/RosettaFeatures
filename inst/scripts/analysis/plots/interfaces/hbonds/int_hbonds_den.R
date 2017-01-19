@@ -149,8 +149,8 @@ run=function(self, sample_sources, output_dir, output_formats){
   
   
   #Averages
-  p <- ggplot(data=avgs, (x = sample_source, y= m , fill=sample_source, ymax=ymax, ymin=ymin) ) + 
-    geom_bar(position="dodge", stat='identity', ) +
+  p <- ggplot(data=avgs, aes(x = sample_source, y= m , fill=sample_source, ymax=ymax, ymin=ymin) ) + 
+    geom_bar(position="dodge", stat='identity') +
     geom_errorbar(position=dodge, width=0.25)
     theme_bw() +
     ggtitle("Average Cross Interface Hydrogen Bonds") +

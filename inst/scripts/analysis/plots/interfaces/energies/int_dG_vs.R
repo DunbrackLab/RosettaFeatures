@@ -80,23 +80,30 @@ run=function(self, sample_sources, output_dir, output_formats){
   p <- ggplot(data=data_rm_out, aes(y = dSASA, x = dG, colour=sample_source)) + parts_no_density +
     ggtitle("dG vs dSASA") +
     ylab("SASA") +
-    xlab("REU")
+    xlab("REU (dG)")
   plot_field(p, "dG_vs_dSASA_by_all")
   plot_field(p, "dG_vs_dSASA_by_interface", grid=~ interface)
+  
+  p <- ggplot(data=data_top, aes(y = dSASA, x = dG, colour=sample_source)) + parts_no_density +
+    ggtitle("dG vs dSASA") +
+    ylab("SASA") +
+    xlab("REU (dG)")
+  plot_field(p, "dG_vs_dSASA_top_10_percentdG_by_all")
+  plot_field(p, "dG_vs_dSASA_top_10_percentdG_by_interface", grid=~ interface)
   
   #dG vs Total Energy
   p <- ggplot(data=data_rm_out, aes(y = total_score, x = dG, colour=sample_source)) + parts_no_density +
     ggtitle("dG vs total_score") +
-    ylab("REU") +
-    xlab("REU")
+    ylab("REU (dG)") +
+    xlab("REU (Total Score)")
   plot_field(p, "dG_vs_total_score_by_all")
   plot_field(p, "dG_vs_total_score_by_interface", grid=~ interface)
   
   #dG vs Total Energy
   p <- ggplot(data=data_top, aes(y = total_score, x = dG, colour=sample_source)) + parts_no_density +
     ggtitle("dG vs total_score") +
-    ylab("REU") +
-    xlab("REU")
+    ylab("REU (dG)") +
+    xlab("REU (Total Score")
   plot_field(p, "dG_vs_total_score_top_10_percent_by_all")
   plot_field(p, "dG_vs_total_score_top_10_percent_by_interface", grid=~ interface)
   

@@ -96,26 +96,6 @@ run=function(self, sample_sources, output_dir, output_formats){
   }
   
   
-  field = "hbond_E_fraction"
-  parts = list(plot_parts, xlab("fraction"))
-  
-  group = c("sample_source")
-  dens <- estimate_density_1d(data,  group, field)
-  p <- ggplot(data=dens, na.rm=T) + parts +
-    geom_line(aes(x, y, colour=sample_source), size=1.2) +
-    ggtitle("Hbond Interface Energy Fraction")
-  plot_field(p, paste(field, "den_by_all", sep="_") )
-  
-  group = c("sample_source", "interface")
-  dens <- estimate_density_1d(data,  group, field)
-  p <- ggplot(data=dens, na.rm=T) + parts +
-    geom_line(aes(x, y, colour=sample_source), size=1.2) +
-    ggtitle("Hbond Interface Energy Fraction")
-  plot_field(p, paste(field, "den_by_interface", sep="_"), grid=interface ~ .)
-  
-  #Side energies?
-  
-  
   #Averages:
   avgs <- ddply(data, .(sample_source, interface), function(d2){
     data.frame(m = mean(d2$dG), std_dev = sd(d2$dG), m_top10 = mean(d2[1:10,]$dG), std_dev_top_10 = sd(d2[1:10,]$dG), top = d2[1,]$dG)

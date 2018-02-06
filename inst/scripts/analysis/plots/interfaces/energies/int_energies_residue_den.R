@@ -12,7 +12,7 @@ library(plyr)
 library(grid)
 
 
-feature_analyses <- c(feature_analyses, new("FeaturesAnalysis",
+feature_analyses <- c(feature_analyses, methods::new("FeaturesAnalysis",
 id = "int_energies-by_residue_den",
 author = "Jared Adolf-Bryfogle",
 brief_description = "Graphs all information of individual interface residues.

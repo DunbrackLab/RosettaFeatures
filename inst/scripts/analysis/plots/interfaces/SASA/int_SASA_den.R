@@ -120,25 +120,42 @@ run=function(self, sample_sources, output_dir, output_formats){
   #Backbone SASA may not be interesting, but I want I still want to know for now.
   #JAB - Commenting out hydrophibic sasa.  Not very useful from my experience and it makes too many plots.
   fields = c("dSASA", "dSASA_bb", "dSASA_sc", "dhSASA", "dhSASA_bb", "dhSASA_sc", "dhSASA_rel_by_charge")
-  fields = c("dSASA", "dSASA_bb", "dSASA_sc")
+  fields = c("dSASA")
+  
+  data_rm_out = subset(data, subset=(data$dSASA <= quantile(data$dSASA, .90))) #Remove high energy outliers
+  data_top = subset(data, subset=(data$dSASA <= quantile(data$dSASA, .10))) #Top 10 percent
   
   for (field in fields){
 
     parts = list(plot_parts, scale_x_continuous("SASA"))
     group = c("sample_source", "side")
-    dens <- estimate_density_1d(data,  group, field)
+    dens <- estimate_density_1d(data_rm_out,  group, field)
     p <- ggplot(data=dens, na.rm=T) + parts +
       geom_line(aes(x, y, colour=sample_source), size=1.2) +
       ggtitle(paste("Buried", field, sep=" "))
     plot_field(p, paste(field, "den_sides_by_all", sep="_"), grid=side ~ .)
   
     group = c("sample_source", "interface", "side")
-    dens <- estimate_density_1d(data,  group, field)
+    dens <- estimate_density_1d(data_rm_out,  group, field)
     p <- ggplot(data=dens, na.rm=T) + parts +
       geom_line(aes(x, y, colour=sample_source), size=1.2) +
       ggtitle(paste("Buried", field, sep=" "))
     plot_field(p, paste(field, "den_sides","by_interface", sep="_"), grid=side~interface)
     
+    parts = list(plot_parts, scale_x_continuous("SASA"))
+    group = c("sample_source", "side")
+    dens <- estimate_density_1d(data_top,  group, field)
+    p <- ggplot(data=dens, na.rm=T) + parts +
+      geom_line(aes(x, y, colour=sample_source), size=1.2) +
+      ggtitle(paste("Buried", field, sep=" "))
+    plot_field(p, paste(field, "top_10_percent_den_sides_by_all", sep="_"), grid=side ~ .)
+    
+    group = c("sample_source", "interface", "side")
+    dens <- estimate_density_1d(data_top,  group, field)
+    p <- ggplot(data=dens, na.rm=T) + parts +
+      geom_line(aes(x, y, colour=sample_source), size=1.2) +
+      ggtitle(paste("Buried", field, sep=" "))
+    plot_field(p, paste(field, "top_10_percent_den_sides","by_interface", sep="_"), grid=side~interface)
   
   }
   
@@ -159,7 +176,7 @@ run=function(self, sample_sources, output_dir, output_formats){
 #  plot_field(p, paste("dSASA_all", "den_sides","by_interface", sep="_"), grid=side~interface)
   
   ####  Means  #########
-  fields = c("dSASA", "dhSASA")
+  fields = c("dSASA")
   for (field in fields){
 
   avgs <- ddply(data, .(sample_source, side, field), function(d2){

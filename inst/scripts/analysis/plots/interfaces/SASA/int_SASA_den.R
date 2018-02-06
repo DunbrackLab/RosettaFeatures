@@ -123,11 +123,11 @@ run=function(self, sample_sources, output_dir, output_formats){
   fields = c("dSASA")
   
   data_rm_out <- ddply(data, .(sample_source), function(d2){
-    subset(data, subset=(data$dSASA <= quantile(data$dSASA, .90))) #Remove high energy outliers
+    subset(d2, subset=(d2$dSASA <= quantile(d2$dSASA, .90))) #Remove high energy outliers
   })
   
   data_top <- ddply(data, .(sample_source), function(d2){
-    subset(data, subset=(data$dSASA <= quantile(data$dSASA, .10))) #Top 10 percent
+    subset(d2, subset=(d2$dSASA <= quantile(d2$dSASA, .10))) #Top 10 percent
   })
   
   for (field in fields){

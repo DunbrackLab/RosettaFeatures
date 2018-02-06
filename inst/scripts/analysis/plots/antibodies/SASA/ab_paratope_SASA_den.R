@@ -52,11 +52,11 @@ run=function(self, sample_sources, output_dir, output_formats){
   
   #Paratope SASA
   data_rm_out <- ddply(data, .(sample_source), function(d2){
-    subset(data, subset=(data$paratope_SASA <= quantile(data$paratope_SASA, .90))) #Remove high energy outliers
+    subset(d2, subset=(d2$paratope_SASA <= quantile(d2$paratope_SASA, .90))) #Remove high energy outliers
   })
   
   data_top <- ddply(data, .(sample_source), function(d2){
-    subset(data, subset=(data$paratope_SASA <= quantile(data$paratope_SASA, .10))) #Top 10 percent
+    subset(d2, subset=(d2$paratope_SASA <= quantile(d2$paratope_SASA, .10))) #Top 10 percent
   })
   
   group = c("sample_source")

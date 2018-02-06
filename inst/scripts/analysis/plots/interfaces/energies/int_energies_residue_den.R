@@ -54,11 +54,11 @@ run=function(self, sample_sources, output_dir, output_formats){
   #Densities
   
   data_rm_out <- ddply(data, .(sample_source), function(d2){
-    subset(data, subset=(data$dG <= quantile(data$dG, .90))) #Remove high energy outliers
+    subset(d2, subset=(d2$dG <= quantile(d2$dG, .90))) #Remove high energy outliers
   })
   
   data_top <- ddply(data, .(sample_source), function(d2){
-    subset(data, subset=(data$dG <= quantile(data$dG, .10))) #Top 10 percent
+    subset(d2, subset=(d2$dG <= quantile(d2$dG, .10))) #Top 10 percent
   })
   
   #Energies

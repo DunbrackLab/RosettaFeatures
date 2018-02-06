@@ -55,11 +55,11 @@ f <- ddply(data, .(sample_source), function(d2){
 })
 
 data_rm_out <- ddply(data, .(sample_source), function(d2){
-  subset(data, subset=(data$total_score <= quantile(data$total_score, .90))) #Remove high energy outliers
+  subset(d2, subset=(d2$total_score <= quantile(d2$total_score, .90))) #Remove high energy outliers
 })
 
 data_top <- ddply(data, .(sample_source), function(d2){
-  subset(data, subset=(data$total_score <= quantile(data$total_score, .10))) #Top 10 percent
+  subset(d2, subset=(d2$total_score <= quantile(d2$total_score, .10))) #Top 10 percent
 })
 
 dens <- estimate_density_1d(f, ids = c("sample_source"), variable = "total_score")

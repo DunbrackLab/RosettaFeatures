@@ -66,7 +66,7 @@ run=function(self, sample_sources, output_dir, output_formats){
   })
   
   f <- ddply(data, .(sample_source), function(d2){
-    subset(data,subset=(d2[1:20,]) )
+    data.frame(dG = d2[1:20,]$dG)
   })
   
   #Basic Densities
@@ -108,13 +108,6 @@ run=function(self, sample_sources, output_dir, output_formats){
       geom_line(aes(x, y, colour=sample_source), size=1.2) +
       ggtitle(field)
     plot_field(p, paste(field, "top_20_den_by_all", sep="_"), )
-    
-    group = c("sample_source", "interface")
-    dens <- estimate_density_1d(f,  group, field)
-    p <- ggplot(data=dens, na.rm=T) + parts +
-      geom_line(aes(x, y, colour=sample_source), size=1.2) +
-      ggtitle(field)
-    plot_field(p, paste(field, "top_20_den_by_interface", sep="_"), grid=interface ~ .)
     
   }
   

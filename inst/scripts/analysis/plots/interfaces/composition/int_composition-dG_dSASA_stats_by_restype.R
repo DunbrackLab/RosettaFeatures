@@ -125,7 +125,7 @@ run=function(self, sample_sources, output_dir, output_formats){
   # interesting, but not entirely useful.  Uncomment this if you find otherwise.
   #fields = c("dSASA", "dSASA_bb", "dSASA_sc", "dhSASA", "dhSASA_bb", "dhSASA_sc", "dhSASA_rel_by_charge")
   
-  fields = c("dSASA", "dSASA_bb", "dSASA_sc")
+  fields = c("dSASA")
   for (field in fields) {
     group = c("sample_source", "restype")
     dens <- estimate_density_1d(res_data[res_data$dSASA > 0,],  group, field)
@@ -153,111 +153,5 @@ run=function(self, sample_sources, output_dir, output_formats){
   p <- p + facet_wrap(~ restype, ncol=4)
   save_plots(self, "dG_by_restype_den_by_all", sample_sources, output_dir, output_formats)
   
-  #JAB - works, but not really useful..
-  #group = c("sample_source", "restype")
-  #field = "dG"
-  #dens <- estimate_density_1d(res_data[res_data$dSASA > 0,],  group, field)
-  #p <- ggplot(data=dens, na.rm=T) + parts +
-  #  geom_line(aes(x, y, colour=sample_source), size=1.2) +
-  #  ggtitle("dG per restype") +
-  #  xlab("REU")
-  #if(nrow(sample_sources) <= 3){
-  #  p <- p + theme(legend.position="bottom", legend.direction="horizontal")
-  #}
-  #p <- p + facet_wrap(~ restype, ncol=4)
-  #save_plots(self, "dG_by_restype_den_>0dSASA_by_all", sample_sources, output_dir, output_formats)
-  
-  #JAB - works, but not really useful..
-  #group = c("sample_source", "restype")
-  #field = "dG"
-  #dens <- estimate_density_1d(res_data[res_data$dSASA == 0,],  group, field)
-  #p <- ggplot(data=dens, na.rm=T) + parts +
-  #  geom_line(aes(x, y, colour=sample_source), size=1.2) +
-  #  ggtitle("dG per restype") +
-  #  xlab("REU")
-  #if(nrow(sample_sources) <= 3){
-  #  p <- p + theme(legend.position="bottom", legend.direction="horizontal")
-  #}
-  #p <- p + facet_wrap(~ restype, ncol=4)
-  #save_plots(self, "dG_by_restype_den_@0dSASA_by_all", sample_sources, output_dir, output_formats)
-  
-  #JAB - Works, but this is hard to see and interpret:
-  #group = c("sample_source", "restype")
-  #field = "dSASA_fraction"
-  #dens <- estimate_density_1d(res_data[res_data$dSASA_fraction > 0,],  group, field)
-  #p <- ggplot(data=dens, na.rm=T) + parts +
-  #  geom_line(aes(x, y, color=restype)) +
-  #  ggtitle("dSASA fraction per restype") +
-  #  facet_grid(sample_source ~ .)
-  #save_plots(self,  "dSASA_fraction_per_restype_den_combined", sample_sources, output_dir, output_formats)
-  
-  #group = c("sample_source", "restype")
-  #field = "dSASA"
-  #dens <- estimate_density_1d(res_data[res_data$dSASA > 0,],  group, field)
-  #p <- ggplot(data=dens, na.rm=T) + parts +
-  #  geom_line(aes(x, y, color=restype)) +
-  #  ggtitle("dSASA per restype") +
-  #  facet_grid(sample_source ~ .)
-  #save_plots(self,  "dSASA_per_restype_den_combined", sample_sources, output_dir, output_formats)
-  
-  
-  
-  #dG vs dSASA by restype
-  #JAB - This works, but it is not really useful.  Commenting it out.
-  
-  #p <- ggplot(data=res_data[res_data$dSASA > 0,], aes(x = dG, y=dSASA, color=sample_source)) +
-  #  #geom_indicator(aes(indicator=counts, colour=sample_source, group=sample_source)) +
-  #  geom_point(size=.5, pch="o") +
-  #  stat_smooth(method=lm) +
-  #  geom_density2d() +
-  #  theme_bw() +
-  #  ggtitle("dG vs dSASA per restype") +
-  #  facet_wrap(~ restype, ncol=4) +
-  #  xlab("REU") +
-  #  ylab("dSASA")
-  #if(nrow(sample_sources) <= 3){
-  #  p <- p + theme(legend.position="bottom", legend.direction="horizontal")
-  #}
-  #save_plots(self, "dSASA_vs_dG_by_restype_>0dSASA_by_all", sample_sources, output_dir, output_formats)
-  
-  
-  
-  
-  
-  #group = c("sample_source", "restype", "interface")
-  #field = "dSASA_fraction"
-  #dens <- estimate_density_1d(res_data[res_data$dSASA_fraction > 0,],  group, field)
-  #p <- ggplot(data=dens, na.rm=T, fill=restype) + parts +
-  #  geom_line(aes(x, y, color=restype)) +
-  #  ggtitle("Hotspot dSASA density") +
-  #  facet_grid(sample_source ~ interface) +
-  #save_plots(self, "dSASA_fraction_per_restype_den_combined_by_interface", sample_sources, output_dir, output_formats)
-  
-  
-  #group = c("sample_source", "restype", "interface")
-  #field = "dSASA_fraction"
-  #dens <- estimate_density_1d(res_data,  group, field)
-  #p <- ggplot(data=dens, na.rm=T) + parts +
-    #geom_line(aes(x, y, colour=sample_source), size=1.2) +
-    #ggtitle("Hotspot dSASA density of Interface residue")
-  #plot_field(p, "dSASA_fraction_per_restype_by_interface", grid=restype ~ interface)
-  #p <- ggplot(data=res_data[res_data$dSASA_fraction > .05,], fill=sample_source,weight=dSASA_fraction) + 
-  #  geom_histogram(aes(x=restype), position="dodge")+ 
-  #  theme_bw() +
-  #  ggtitle("Interface ResType Composition")
-  #scale_x_continuous("restype") +
-  #scale_y_continuous("n")
-  #plot_field(p, "restype_composition_weighted_by_dSASA_frac") 
-  #plot_field(p, "restype_composition_weighted_by_dSASA_frac_by_interface", grid=interface ~ .)
-  
-  #restype vs avg dSASA
-  #p <- ggplot(data=res_data) +
-  #geom_histogram(aes(x=mean(restype)), position="dodge") +
-  # theme_bw() +
-  # ggtitle("Interface ResType Composition")
-  #scale_x_continuous("restype") +
-  #scale_y_continuous("n")
-  #plot_field(p, "restype_vs_avg_dSASA_fraction") 
-  #plot_field(p, "restype_vs_avg_dSASA_fraction_by_interface", grid=interface ~ .)
   
 })) # end FeaturesAnalysis

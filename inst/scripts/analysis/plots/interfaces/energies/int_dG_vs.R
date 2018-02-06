@@ -56,7 +56,10 @@ run=function(self, sample_sources, output_dir, output_formats){
   
   
   data = query_sample_sources(sample_sources, sele)
-  data_rm_out = data[data$dG<=5000 & data$dG>-5000,]#Remove high energy outliers
+  #data_rm_out = data[data$dG<=5000 & data$dG>-5000,]#Remove high energy outliers
+  
+  data_rm_out = subset(data, subset=(data$dG <= quantile(data$dG, .90))) #Remove high energy outliers
+  data_top = subset(data, subset=(data$dG <= quantile(data$dG, .10))) #Top 10 percent
   
   parts = list(
     geom_point(size=1.0, pch="o"),
@@ -89,29 +92,12 @@ run=function(self, sample_sources, output_dir, output_formats){
   plot_field(p, "dG_vs_total_score_by_all")
   plot_field(p, "dG_vs_total_score_by_interface", grid=~ interface)
   
-  #dG vs dG_cross
-  p <- ggplot(data = data_rm_out, aes(x=dG, y=dG_cross, colour=sample_source)) + parts_no_density +
-    ggtitle("dG vs Crossterm dG") +
-    xlab("REU") +
-    ylab("REU")
-  plot_field(p, "dG_vs_dG_cross_by_all")
-  plot_field(p, "dG_vs_dG_cross_by_interface", grid= ~ interface)
-  
-  p <- ggplot(data = data_rm_out, aes(x=dG, y=dG_cross, color=dSASA)) + parts_no_density +
-    ggtitle("dG vs Crossterm dG") +
-    xlab("REU") +
+  #dG vs Total Energy
+  p <- ggplot(data=data_top, aes(y = total_score, x = dG, colour=sample_source)) + parts_no_density +
+    ggtitle("dG vs total_score") +
     ylab("REU") +
-    scale_fill_hue(l=40)
-  plot_field(p, "dG_vs_dG_cross_col_by_dSASA_by_all", grid=sample_source ~ .)
-  plot_field(p, "dG_vs_dG_cross_col_by_dSASA_by_interface", grid=sample_source ~ interface) 
-  
-  #dG_cross vs dSASA
-  p <- ggplot(data = data_rm_out, aes(x=dG_cross, y=dSASA, colour=sample_source)) + parts_no_density +
-    ggtitle("dG_cross vs dSASA") +
-    xlab("REU") +
-    ylab("SASA")
-  plot_field(p, "dg_cross_vs_dSASA" )
-  plot_field(p, "dG_cross_vs_dSASA_by_interface", grid= ~ interface)
-  
+    xlab("REU")
+  plot_field(p, "dG_vs_total_score_top_10_percent_by_all")
+  plot_field(p, "dG_vs_total_score_top_10_percent_by_interface", grid=~ interface)
   
 })) # end FeaturesAnalysis

@@ -53,12 +53,14 @@ run=function(self, sample_sources, output_dir, output_formats){
   
   #Densities
   
+  data_rm_out = subset(data, subset=(data$dG <= quantile(data$dG, .90))) #Remove high energy outliers
+  data_top = subset(data, subset=(data$dG <= quantile(data$dG, .10))) #Top 10 percent
   
   #Energies
-  fields = c("dG", "energy_int", "energy_sep")
+  fields = c("dG")
   for(field in fields){
     group = c("sample_source")
-    dens <- estimate_density_1d(data,  group, field)
+    dens <- estimate_density_1d(data_rm_out,  group, field)
     p <- ggplot(data = dens, na.rm=T) + plot_parts +
       geom_line(aes(x, y, colour=sample_source), size=1.2) +
       ggtitle(paste("Residue", field, sep=" ")) +
@@ -67,56 +69,33 @@ run=function(self, sample_sources, output_dir, output_formats){
     plot_field(p, paste(field, "residue_dens_by_all", sep="_"))
   
     group = c("sample_source", "interface")
-    dens <- estimate_density_1d(data,  group, field)
+    dens <- estimate_density_1d(data_rm_out,  group, field)
     p <- ggplot(data = dens, na.rm=T) + plot_parts +
       geom_line(aes(x, y, colour=sample_source), size=1.2) +
       ggtitle(paste("Residue", field, sep=" ")) +
       xlab("REU")
       #scale_x_continuous("REU", limit = c(-15, 15))
     plot_field(p, paste(field, "residue_dens_by_interface", sep="_"), grid=interface ~ .)
+    
+    dens <- estimate_density_1d(data_top,  group, field)
+    p <- ggplot(data = dens, na.rm=T) + plot_parts +
+      geom_line(aes(x, y, colour=sample_source), size=1.2) +
+      ggtitle(paste("Residue", field, sep=" ")) +
+      xlab("REU")
+    #scale_x_continuous("REU", limit = c(-15, 15))
+    plot_field(p, paste(field, "top_10_percent_residue_dens_by_all", sep="_"))
+    
+    group = c("sample_source", "interface")
+    dens <- estimate_density_1d(data_top,  group, field)
+    p <- ggplot(data = dens, na.rm=T) + plot_parts +
+      geom_line(aes(x, y, colour=sample_source), size=1.2) +
+      ggtitle(paste("Residue", field, sep=" ")) +
+      xlab("REU")
+    #scale_x_continuous("REU", limit = c(-15, 15))
+    plot_field(p, paste(field, "top_10_percent_residue_dens_by_interface", sep="_"), grid=interface ~ .)
+    
   }
   
   
-  #dG where dSASA is 0:
-  #data[-15 < data[field] & data[field] < 15,]
-  
-  field = "dG"
-  group = c("sample_source")
-  dens <- estimate_density_1d(data[data$dSASA == 0,],  group, field)
-  p <- ggplot(data = dens, na.rm=T) + plot_parts +
-    geom_line(aes(x, y, colour=sample_source), size=1.2) +
-    ggtitle(paste("Residue", field, sep=" ")) +
-    xlab("REU")
-    #scale_x_continuous(field, limit=c(-15, 15))
-  plot_field(p, paste(field, "residue_@0dSASA_dens", sep="_"))
-  
-  group = c("sample_source", "interface")
-  dens <- estimate_density_1d(data[data$dSASA == 0,],  group, field)
-  p <- ggplot(data = dens, na.rm=T) + plot_parts +
-    geom_line(aes(x, y, colour=sample_source), size=1.2) +
-    ggtitle(paste("Residue", field, sep=" ")) +
-    xlab("REU")
-    #scale_x_continuous(field, limit=c(-15, 15))
-  plot_field(p, paste(field, "residue_@0dSASA_dens_by_interface", sep="_"), grid=interface ~ .)
-  
-  #dG where dSASA > 0 :
-  field = "dG"
-  group = c("sample_source")
-  dens <- estimate_density_1d(data[data$dSASA >0,],  group, field)
-  p <- ggplot(data = dens, na.rm=T) + plot_parts +
-    geom_line(aes(x, y, colour=sample_source), size=1.2) +
-    ggtitle(paste("Residue", field, sep=" ")) +
-    xlab("REU")
-    #scale_x_continuous(field, limit=c(-15, 15))
-  plot_field(p, paste(field, "residue_>0dSASA_dens", sep="_"))
-  
-  group = c("sample_source", "interface")
-  dens <- estimate_density_1d(data[data$dSASA > 0,],  group, field)
-  p <- ggplot(data = dens, na.rm=T) + plot_parts +
-    geom_line(aes(x, y, colour=sample_source), size=1.2) +
-    ggtitle(paste("Residue", field, sep=" ")) +
-    xlab("REU")
-    #scale_x_continuous(field, limit=c(-15, 15))
-  plot_field(p, paste(field, "residue_>0dSASA_dens_by_interface", sep="_"), grid=interface ~ .)
   #Per residue data.  This may get crazy.
 }))

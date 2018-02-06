@@ -102,45 +102,6 @@ run=function(self, sample_sources, output_dir, output_formats){
     geom_line(aes(x, y, colour=sample_source), size=1.2) +
     ggtitle("Interface nres")
   plot_field(p, paste(field, "den_sides","by_interface", sep="_"), grid=side~interface)
-  
-  #Restype composition - Overall interface 
-  sele <-"
-  SELECT
-    interface_residues.interface as interface,
-    residues.name3 as restype,
-    residue_type.name1 as restype1,
-    interface_residues.SASA_int as SASA_int,
-    interface_residues.dSASA as dSASA,
-    interface_residues.dSASA - interface_residues.dSASA_sc as dSASA_bb,
-    interface_residues.dSASA_sc as dSASA_sc,
-    interface_residues.dhSASA as dhSASA,
-    interface_residues.dG as dG,
-    
-    interface_residues.relative_dSASA_fraction as dSASA_fraction,
-    interface_residues.struct_id as struct_id,
-    structures.input_tag as input_tag
-  FROM
-    residues,
-    interface_residues,
-    residue_type,
-    structures
-  WHERE
-    interface_residues.struct_id == residues.struct_id and
-    interface_residues.resNum == residues.resNum and
-    residues.name3==residue_type.name3 and
-    interface_residues.struct_id == structures.struct_id
-  "
-  res_data = query_sample_sources(sample_sources, sele)
-  
-  
-
-  p <- ggplot(data=res_data, aes(x=restype1, y = ..density.., fill=sample_source)) + 
-    geom_histogram(position="dodge", binwidth=1)+ 
-    theme_bw() +
-    ggtitle("Interface ResType Composition") 
-  
-  plot_field(p, "restype_composition_by_all") 
-  plot_field(p, "restype_composition_by_interface", grid=interface ~ .)
     
       
       

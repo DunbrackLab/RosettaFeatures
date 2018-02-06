@@ -50,7 +50,6 @@ run=function(self, sample_sources, output_dir, output_formats){
   
   data = query_sample_sources(sample_sources, sele)
   
-
   #Scatterplots
   #sc_value vs packstat
   parts = list(
@@ -77,22 +76,23 @@ run=function(self, sample_sources, output_dir, output_formats){
   plot_field(p, "sc_value_vs dSASA_all", grid = sample_source ~ .)
   plot_field(p, "sc_value_vs_dSASA_by_interface", grid=interface ~ sample_source)
   
+  data_rm_out = subset(data, subset=(data$dG <= quantile(data$dG, .90))) #Remove high energy outliers
+  data_top = subset(data, subset=(data$dG <= quantile(data$dG, .10))) #Top 10 percent
   
   #sc_value vs dG
-  p <- ggplot(data = data[data$dG<5000,], aes(x=sc_value, y=dG)) + parts +
+  p <- ggplot(data = data_rm_out, aes(x=sc_value, y=dG)) + parts +
     ggtitle("sc_value_vs_dG") +
     scale_x_continuous("sc_value", limit = c(0, 1.0)) +
     scale_y_continuous("REU")
   plot_field(p, "sc_value_vs_dG_by_all", grid=sample_source ~ .)
   plot_field(p, "sc_value_vs_dG_by_interface", grid=interface ~ sample_source)
   
-  #sc_value vs crossterm
-  p <- ggplot(data = data[data$dG<5000,], aes(x=sc_value, y=dG_cross)) + parts +
-    ggtitle("sc_value vs dG_cross") +
+  p <- ggplot(data = data_top, aes(x=sc_value, y=dG)) + parts +
+    ggtitle("sc_value_vs_dG") +
     scale_x_continuous("sc_value", limit = c(0, 1.0)) +
     scale_y_continuous("REU")
-  plot_field(p, "sc_value_vs_dG_cross_by_all", grid=sample_source ~ .)
-  plot_field(p, "sc_value_vs_dG_cross_by_interface", grid=interface ~ sample_source)
+  plot_field(p, "top_10_percent_dG-sc_value_vs_dG_by_all", grid=sample_source ~ .)
+  plot_field(p, "top_10_percent_dG-sc_value_vs_dG_by_interface", grid=interface ~ sample_source)
   
   #deltaUnsatHbonds vs sc_value
   p <- ggplot(data = data, aes(x=sc_value, y=delta_unsatHbonds)) + parts +

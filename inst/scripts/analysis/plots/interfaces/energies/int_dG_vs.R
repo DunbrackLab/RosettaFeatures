@@ -99,16 +99,16 @@ run=function(self, sample_sources, output_dir, output_formats){
   #dG vs Total Energy
   p <- ggplot(data=data_rm_out, aes(y = total_score, x = dG, colour=sample_source)) + parts_no_density +
     ggtitle("dG vs total_score") +
-    ylab("REU (dG)") +
-    xlab("REU (Total Score)")
+    xlab("REU (dG)") +
+    ylab("REU (Total Score)")
   plot_field(p, "dG_vs_total_score_top_90_percentdG_by_all")
   plot_field(p, "dG_vs_total_score_top_90_percentdG_by_interface", grid=~ interface)
   
   #dG vs Total Energy
   p <- ggplot(data=data_top, aes(y = total_score, x = dG, colour=sample_source)) + parts_no_density +
     ggtitle("dG vs total_score") +
-    ylab("REU (dG)") +
-    xlab("REU (Total Score")
+    xlab("REU (dG)") +
+    ylab("REU (Total Score")
   plot_field(p, "dG_vs_total_score_top_10_percent_by_all")
   plot_field(p, "dG_vs_total_score_top_10_percent_by_interface", grid=~ interface)
   

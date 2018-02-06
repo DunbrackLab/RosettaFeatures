@@ -45,7 +45,7 @@ plot_id <- "total_score"
 p <- ggplot(data=dens) + theme_bw() +
 	geom_line(aes(x, y, colour=sample_source), size=1.4) +
 	geom_indicator(aes(indicator=counts, colour=sample_source, group=sample_source)) +
-	ggtitle("Rosetta Structure Score") +
+	ggtitle("Total Rosetta Energy") +
 	labs(x="Rosetta Energy Units") +
 	scale_y_continuous("FeatureDensity", breaks=c(0, .3, .6))
 save_plots(self, plot_id, sample_sources, output_dir, output_formats)

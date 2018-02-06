@@ -38,8 +38,12 @@ run=function(self, sample_sources, output_dir, output_formats){
     structure_scores.struct_id = interfaces.struct_id
   "
 
+  #plot_parts <- list(
+  #  geom_indicator(aes(indicator=counts, colour=sample_source, group=sample_source)),
+  #  scale_y_continuous("Feature Density"),
+  #  theme_bw())
+  
   plot_parts <- list(
-    geom_indicator(aes(indicator=counts, colour=sample_source, group=sample_source)),
     scale_y_continuous("Feature Density"),
     theme_bw())
   

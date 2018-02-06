@@ -66,7 +66,7 @@ run=function(self, sample_sources, output_dir, output_formats){
   })
   
   f <- ddply(data, .(sample_source), function(d2){
-    data.frame(total_score = d2[1:20,]$dG)
+    data.frame(dG = d2[1:20,]$dG)
   })
   
   #Basic Densities

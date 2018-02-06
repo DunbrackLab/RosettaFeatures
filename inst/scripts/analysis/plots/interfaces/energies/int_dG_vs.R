@@ -58,8 +58,13 @@ run=function(self, sample_sources, output_dir, output_formats){
   data = query_sample_sources(sample_sources, sele)
   #data_rm_out = data[data$dG<=5000 & data$dG>-5000,]#Remove high energy outliers
   
-  data_rm_out = subset(data, subset=(data$dG <= quantile(data$dG, .90))) #Remove high energy outliers
-  data_top = subset(data, subset=(data$dG <= quantile(data$dG, .10))) #Top 10 percent
+  data_rm_out <- ddply(data, .(sample_source), function(d2){
+    subset(data, subset=(data$dG <= quantile(data$dG, .90))) #Remove high energy outliers
+  })
+    
+  data_rm_out <- ddply(data, .(sample_source), function(d2){
+    subset(data, subset=(data$dG <= quantile(data$dG, .10))) #Top 10 percent
+  })
   
   parts = list(
     geom_point(size=1.0, pch="o"),
@@ -81,8 +86,8 @@ run=function(self, sample_sources, output_dir, output_formats){
     ggtitle("dG vs dSASA") +
     ylab("SASA") +
     xlab("REU (dG)")
-  plot_field(p, "dG_vs_dSASA_by_all")
-  plot_field(p, "dG_vs_dSASA_by_interface", grid=~ interface)
+  plot_field(p, "dG_vs_dSASA_top_90_percentdG_by_all")
+  plot_field(p, "dG_vs_dSASA_top_90_percentdG_by_interface", grid=~ interface)
   
   p <- ggplot(data=data_top, aes(y = dSASA, x = dG, colour=sample_source)) + parts_no_density +
     ggtitle("dG vs dSASA") +
@@ -96,8 +101,8 @@ run=function(self, sample_sources, output_dir, output_formats){
     ggtitle("dG vs total_score") +
     ylab("REU (dG)") +
     xlab("REU (Total Score)")
-  plot_field(p, "dG_vs_total_score_by_all")
-  plot_field(p, "dG_vs_total_score_by_interface", grid=~ interface)
+  plot_field(p, "dG_vs_total_score_top_90_percentdG_by_all")
+  plot_field(p, "dG_vs_total_score_top_90_percentdG_by_interface", grid=~ interface)
   
   #dG vs Total Energy
   p <- ggplot(data=data_top, aes(y = total_score, x = dG, colour=sample_source)) + parts_no_density +

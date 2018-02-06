@@ -57,8 +57,17 @@ run=function(self, sample_sources, output_dir, output_formats){
   data = query_sample_sources(sample_sources, sele)
   #data_rm_out = data[data$dG<=5000 & data$dG>-5000,]#Remove high energy outliers
   
-  data_rm_out = subset(data, subset=(data$dG <= quantile(data$dG, .90))) #Remove high energy outliers
-  data_top = subset(data, subset=(data$dG <= quantile(data$dG, .10))) #Top 10 percent
+  data_rm_out <- ddply(data, .(sample_source), function(d2){
+    subset(data, subset=(data$dG <= quantile(data$dG, .90))) #Remove high energy outliers
+  })
+  
+  data_top <- ddply(data, .(sample_source), function(d2){
+    subset(data, subset=(data$dG <= quantile(data$dG, .10))) #Top 10 percent
+  })
+  
+  f <- ddply(data, .(sample_source), function(d2){
+    data.frame(total_score = d2[1:20,]$dG)
+  })
   
   #Basic Densities
   fields = c("dG" )
@@ -70,14 +79,14 @@ run=function(self, sample_sources, output_dir, output_formats){
     p <- ggplot(data=dens, na.rm=T) + parts +
       geom_line(aes(x, y, colour=sample_source), size=1.2) +
       ggtitle(field)
-    plot_field(p, paste(field, "den_by_all", sep="_"), )
+    plot_field(p, paste(field, "top_90_percent_den_by_all", sep="_"), )
     
     group = c("sample_source", "interface")
     dens <- estimate_density_1d(data_rm_out,  group, field)
     p <- ggplot(data=dens, na.rm=T) + parts +
       geom_line(aes(x, y, colour=sample_source), size=1.2) +
       ggtitle(field)
-    plot_field(p, paste(field, "den_by_interface", sep="_"), grid=interface ~ .)
+    plot_field(p, paste(field, "top_90_percent_den_by_interface", sep="_"), grid=interface ~ .)
     
     group = c("sample_source")
     dens <- estimate_density_1d(data_top,  group, field)
@@ -92,6 +101,20 @@ run=function(self, sample_sources, output_dir, output_formats){
       geom_line(aes(x, y, colour=sample_source), size=1.2) +
       ggtitle(field)
     plot_field(p, paste(field, "top_10_percent_den_by_interface", sep="_"), grid=interface ~ .)
+   
+    group = c("sample_source")
+    dens <- estimate_density_1d(f,  group, field)
+    p <- ggplot(data=dens, na.rm=T) + parts +
+      geom_line(aes(x, y, colour=sample_source), size=1.2) +
+      ggtitle(field)
+    plot_field(p, paste(field, "top_20_den_by_all", sep="_"), )
+    
+    group = c("sample_source", "interface")
+    dens <- estimate_density_1d(f,  group, field)
+    p <- ggplot(data=dens, na.rm=T) + parts +
+      geom_line(aes(x, y, colour=sample_source), size=1.2) +
+      ggtitle(field)
+    plot_field(p, paste(field, "top_20_den_by_interface", sep="_"), grid=interface ~ .)
     
   }
   

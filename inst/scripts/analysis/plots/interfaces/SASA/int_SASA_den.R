@@ -122,8 +122,13 @@ run=function(self, sample_sources, output_dir, output_formats){
   fields = c("dSASA", "dSASA_bb", "dSASA_sc", "dhSASA", "dhSASA_bb", "dhSASA_sc", "dhSASA_rel_by_charge")
   fields = c("dSASA")
   
-  data_rm_out = subset(data, subset=(data$dSASA <= quantile(data$dSASA, .90))) #Remove high energy outliers
-  data_top = subset(data, subset=(data$dSASA <= quantile(data$dSASA, .10))) #Top 10 percent
+  data_rm_out <- ddply(data, .(sample_source), function(d2){
+    subset(data, subset=(data$dSASA <= quantile(data$dSASA, .90))) #Remove high energy outliers
+  })
+  
+  data_top <- ddply(data, .(sample_source), function(d2){
+    subset(data, subset=(data$dSASA <= quantile(data$dSASA, .10))) #Top 10 percent
+  })
   
   for (field in fields){
 
@@ -133,14 +138,14 @@ run=function(self, sample_sources, output_dir, output_formats){
     p <- ggplot(data=dens, na.rm=T) + parts +
       geom_line(aes(x, y, colour=sample_source), size=1.2) +
       ggtitle(paste("Buried", field, sep=" "))
-    plot_field(p, paste(field, "den_sides_by_all", sep="_"), grid=side ~ .)
+    plot_field(p, paste(field, "top_90_percent_den_sides_by_all", sep="_"), grid=side ~ .)
   
     group = c("sample_source", "interface", "side")
     dens <- estimate_density_1d(data_rm_out,  group, field)
     p <- ggplot(data=dens, na.rm=T) + parts +
       geom_line(aes(x, y, colour=sample_source), size=1.2) +
       ggtitle(paste("Buried", field, sep=" "))
-    plot_field(p, paste(field, "den_sides","by_interface", sep="_"), grid=side~interface)
+    plot_field(p, paste(field, "top_90_percent_den_sides","by_interface", sep="_"), grid=side~interface)
     
     parts = list(plot_parts, scale_x_continuous("SASA"))
     group = c("sample_source", "side")

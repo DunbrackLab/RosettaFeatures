@@ -76,16 +76,21 @@ run=function(self, sample_sources, output_dir, output_formats){
   plot_field(p, "sc_value_vs dSASA_all", grid = sample_source ~ .)
   plot_field(p, "sc_value_vs_dSASA_by_interface", grid=interface ~ sample_source)
   
-  data_rm_out = subset(data, subset=(data$dG <= quantile(data$dG, .90))) #Remove high energy outliers
-  data_top = subset(data, subset=(data$dG <= quantile(data$dG, .10))) #Top 10 percent
+  data_rm_out <- ddply(data, .(sample_source), function(d2){
+    subset(data, subset=(data$dG <= quantile(data$dG, .90))) #Remove high energy outliers
+  })
+  
+  data_top <- ddply(data, .(sample_source), function(d2){
+    subset(data, subset=(data$dG <= quantile(data$dG, .10))) #Top 10 percent
+  })
   
   #sc_value vs dG
   p <- ggplot(data = data_rm_out, aes(x=sc_value, y=dG)) + parts +
     ggtitle("sc_value_vs_dG") +
     scale_x_continuous("sc_value", limit = c(0, 1.0)) +
     scale_y_continuous("REU")
-  plot_field(p, "sc_value_vs_dG_by_all", grid=sample_source ~ .)
-  plot_field(p, "sc_value_vs_dG_by_interface", grid=interface ~ sample_source)
+  plot_field(p, "sc_value_vs_dG-(top_90_percent)-by_all", grid=sample_source ~ .)
+  plot_field(p, "sc_value_vs_dG_(top_90_percent)-by_interface", grid=interface ~ sample_source)
   
   p <- ggplot(data = data_top, aes(x=sc_value, y=dG)) + parts +
     ggtitle("sc_value_vs_dG") +

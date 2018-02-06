@@ -51,8 +51,13 @@ run=function(self, sample_sources, output_dir, output_formats){
   
   
   #Paratope SASA
-  data_rm_out = subset(data, subset=(data$dG <= quantile(data$dG, .90))) #Remove high energy outliers
-  data_top = subset(data, subset=(data$dG <= quantile(data$dG, .10))) #Top 10 percent
+  data_rm_out <- ddply(data, .(sample_source), function(d2){
+    subset(data, subset=(data$paratope_SASA <= quantile(data$paratope_SASA, .90))) #Remove high energy outliers
+  })
+  
+  data_top <- ddply(data, .(sample_source), function(d2){
+    subset(data, subset=(data$paratope_SASA <= quantile(data$paratope_SASA, .10))) #Top 10 percent
+  })
   
   group = c("sample_source")
   dens <- estimate_density_1d(data_rm_out, group, c("paratope_SASA"))
@@ -60,7 +65,7 @@ run=function(self, sample_sources, output_dir, output_formats){
     geom_line(aes(x, y, colour=sample_source), size=1.2) +
     xlab("SASA") +
     ggtitle("CDR Paratope SASA")
-  plot_field(p, "paratope_sasa_den")
+  plot_field(p, "top_90_percent_paratope_sasa_den")
 
   group = c("sample_source")
   dens <- estimate_density_1d(data_top, group, c("paratope_SASA"))

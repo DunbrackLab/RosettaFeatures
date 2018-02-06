@@ -53,8 +53,13 @@ run=function(self, sample_sources, output_dir, output_formats){
   
   #Densities
   
-  data_rm_out = subset(data, subset=(data$dG <= quantile(data$dG, .90))) #Remove high energy outliers
-  data_top = subset(data, subset=(data$dG <= quantile(data$dG, .10))) #Top 10 percent
+  data_rm_out <- ddply(data, .(sample_source), function(d2){
+    subset(data, subset=(data$dG <= quantile(data$dG, .90))) #Remove high energy outliers
+  })
+  
+  data_top <- ddply(data, .(sample_source), function(d2){
+    subset(data, subset=(data$dG <= quantile(data$dG, .10))) #Top 10 percent
+  })
   
   #Energies
   fields = c("dG")
@@ -66,7 +71,7 @@ run=function(self, sample_sources, output_dir, output_formats){
       ggtitle(paste("Residue", field, sep=" ")) +
       xlab("REU")
       #scale_x_continuous("REU", limit = c(-15, 15))
-    plot_field(p, paste(field, "residue_dens_by_all", sep="_"))
+    plot_field(p, paste(field, "residue_dens_top_90_percent_by_all", sep="_"))
   
     group = c("sample_source", "interface")
     dens <- estimate_density_1d(data_rm_out,  group, field)
@@ -75,7 +80,7 @@ run=function(self, sample_sources, output_dir, output_formats){
       ggtitle(paste("Residue", field, sep=" ")) +
       xlab("REU")
       #scale_x_continuous("REU", limit = c(-15, 15))
-    plot_field(p, paste(field, "residue_dens_by_interface", sep="_"), grid=interface ~ .)
+    plot_field(p, paste(field, "residue_dens_top_90_percent_by_interface", sep="_"), grid=interface ~ .)
     
     dens <- estimate_density_1d(data_top,  group, field)
     p <- ggplot(data = dens, na.rm=T) + plot_parts +
@@ -96,6 +101,4 @@ run=function(self, sample_sources, output_dir, output_formats){
     
   }
   
-  
-  #Per residue data.  This may get crazy.
 }))

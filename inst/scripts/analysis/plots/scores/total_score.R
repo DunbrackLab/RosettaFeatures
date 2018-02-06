@@ -54,6 +54,14 @@ f <- ddply(data, .(sample_source), function(d2){
   data.frame(total_score = d2[1:20,]$total_score)
 })
 
+data_rm_out <- ddply(data, .(sample_source), function(d2){
+  subset(data, subset=(data$total_score <= quantile(data$total_score, .90))) #Remove high energy outliers
+})
+
+data_top <- ddply(data, .(sample_source), function(d2){
+  subset(data, subset=(data$total_score <= quantile(data$total_score, .10))) #Top 10 percent
+})
+
 dens <- estimate_density_1d(f, ids = c("sample_source"), variable = "total_score")
 
 plot_id <- "total_score_top_20"
@@ -65,12 +73,41 @@ p <- ggplot(data=dens) + theme_bw() +
 	scale_y_continuous("FeatureDensity", breaks=c(0, .3, .6))
 save_plots(self, plot_id, sample_sources, output_dir, output_formats)
 
+
+dens <- estimate_density_1d(
+  data = data_rm_out,
+  ids = c("sample_source"),
+  variable = "total_score")
+
+plot_id <- "total_score_top_90_percent"
+p <- ggplot(data=dens) + theme_bw() +
+  geom_line(aes(x, y, colour=sample_source), size=1.4) +
+  geom_indicator(aes(indicator=counts, colour=sample_source, group=sample_source)) +
+  ggtitle("Rosetta Structure Score") +
+  labs(x="Rosetta Energy Units") +
+  scale_y_continuous("FeatureDensity", breaks=c(0, .3, .6))
+save_plots(self, plot_id, sample_sources, output_dir, output_formats)
+
+dens <- estimate_density_1d(
+  data = data_top,
+  ids = c("sample_source"),
+  variable = "total_score")
+
+plot_id <- "total_score_top_10_percent"
+p <- ggplot(data=dens) + theme_bw() +
+  geom_line(aes(x, y, colour=sample_source), size=1.4) +
+  geom_indicator(aes(indicator=counts, colour=sample_source, group=sample_source)) +
+  ggtitle("Rosetta Structure Score") +
+  labs(x="Rosetta Energy Units") +
+  scale_y_continuous("FeatureDensity", breaks=c(0, .3, .6))
+save_plots(self, plot_id, sample_sources, output_dir, output_formats)
+
+
 #Averages Scoring
 avgs <- ddply(data, .(sample_source), function(d2){
   data.frame(m = mean(d2$total_score), std_dev = sd(d2$total_score), m_top10 = mean(d2[1:10,]$total_score), std_dev_top_10 = sd(d2[1:10,]$total_score), top = d2[1,]$total_score)
 })
 
-print(avgs)
 p <- ggplot(data=avgs ) + 
   geom_bar(position="dodge", stat='identity', aes(x = sample_source, y= m , fill=sample_source)) +
   #geom_errorbar(aes(ymin = m-std_dev, ymax=m+std_dev) +

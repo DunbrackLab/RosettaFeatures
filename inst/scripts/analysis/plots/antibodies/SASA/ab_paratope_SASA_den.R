@@ -51,29 +51,24 @@ run=function(self, sample_sources, output_dir, output_formats){
   
   
   #Paratope SASA
+  data_rm_out = subset(data, subset=(data$dG <= quantile(data$dG, .90))) #Remove high energy outliers
+  data_top = subset(data, subset=(data$dG <= quantile(data$dG, .10))) #Top 10 percent
+  
   group = c("sample_source")
-  dens <- estimate_density_1d(data, group, c("paratope_SASA"))
+  dens <- estimate_density_1d(data_rm_out, group, c("paratope_SASA"))
   p <- ggplot(data=dens, na.rm=T) + parts +
     geom_line(aes(x, y, colour=sample_source), size=1.2) +
     xlab("SASA") +
     ggtitle("CDR Paratope SASA")
   plot_field(p, "paratope_sasa_den")
-  
-  #Paratope hSASA
+
   group = c("sample_source")
-  dens <- estimate_density_1d(data, group, c("paratope_hSASA"))
+  dens <- estimate_density_1d(data_top, group, c("paratope_SASA"))
   p <- ggplot(data=dens, na.rm=T) + parts +
     geom_line(aes(x, y, colour=sample_source), size=1.2) +
     xlab("SASA") +
-    ggtitle("CDR Paratope hSASA")
-  plot_field(p, "paratope_hsasa_den")
+    ggtitle("CDR Paratope SASA")
+  plot_field(p, "paratope_sasa__top_10_percent_den")
   
-  #Paratope pSASA
-  group = c("sample_source")
-  dens <- estimate_density_1d(data, group, c("paratope_pSASA"))
-  p <- ggplot(data=dens, na.rm=T) + parts +
-    geom_line(aes(x, y, colour=sample_source), size=1.2) +
-    xlab("SASA") +
-    ggtitle("CDR Paratope pSASA")
-  plot_field(p, "paratope_psasa_den")
+  
 })) # end FeaturesAnalysis

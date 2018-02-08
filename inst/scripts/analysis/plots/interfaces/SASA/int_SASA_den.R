@@ -19,42 +19,6 @@ feature_reporter_dependencies = c("InterfaceFeatures/AntibodyFeatures"),
 run=function(self, sample_sources, output_dir, output_formats){
   
   #First we run on all the interfaces in the database
-
-  
-
-#  sele = "
-#  SELECT
-#    dSASA,
-#    dSASA_hphobic,
-#    dSASA_polar,
-#    interface
-#  FROM
-#    interfaces"
-#  
-#  data = query_sample_sources(sample_sources, sele)
-# 
-
-#  fields = c("dSASA", "dSASA_hphobic", "dSASA_polar")
-#  for(field in fields){
-#    
-#    group = c("sample_source")
-#    dens <- estimate_density_1d(data,  group, field)
-#    p <- ggplot(data=dens, na.rm=T) + parts +
-#      geom_line(aes(x, y, colour=sample_source), size=1.2) +
-#      ggtitle(field)
-#    plot_field(p, paste(field, "den_by_all", sep="_"))
-#    
-#    group = c("sample_source", "interface")
-#    dens <- estimate_density_1d(data,  group, field)
-#    p <- ggplot(data=dens, na.rm=T) + parts +
-#      geom_line(aes(x, y, colour=sample_source), size=1.2) +
-#      ggtitle(field)
-#    plot_field(p, paste(field, "den_by_interface", sep="_"),grid=~interface)
-#  }
-#
-#  
-#  #dSASA sides
-#  int_data = data
   
   plot_parts <- list(
     geom_indicator(aes(indicator=counts, colour=sample_source, group=sample_source)),
@@ -164,21 +128,6 @@ run=function(self, sample_sources, output_dir, output_formats){
   
   }
   
-
-#  Plotting all together - Might look like crap, but lets try it.
-#  group = c("sample_source", "interface", "side")
-#  dens_dsasa <- estimate_density_1d(data,  group, c("dSASA"))
-#  dens_dsasa_bb <- estimate_density_1d(data, group, c("dSASA_bb"))
-#  dens_dsasa_sc <- estimate_density_1d(data, group, c("dSASA_sc"))
-#  
-#  p <- ggplot(data=dens_dsasa, na.rm=T) + parts +
-#    geom_line(aes(x, y, colour=sample_source), size=1.2) +
-#    #geom_point(data=dens_dsasa, aes(x, y, colour=sample_source, size=.5, pch="o")) +
-#    geom_line(data=dens_dsasa_bb, aes(x, y, colour=sample_source, linetype= "dotted"), size=1.2) +
-#    geom_line(data=dens_dsasa_sc, aes(x, y, colour=sample_source, linetype= "dotdash"), size= 1.2) +
-#    ggtitle("dSASA Density")
-      
-#  plot_field(p, paste("dSASA_all", "den_sides","by_interface", sep="_"), grid=side~interface)
   
   ####  Means  #########
   fields = c("dSASA")
@@ -260,6 +209,73 @@ run=function(self, sample_sources, output_dir, output_formats){
     ggtitle("Aromatic dSASA Fraction")
   plot_field(p, "dSASA_aromatic_fraction_den_by_interface", grid=side~interface)
   
-
+  #Natives
+  
+  sele = "
+  SELECT
+  dSASA,
+  dSASA_sc,
+  dSASA - dSASA_sc as dSASA_bb,
+  dhSASA,
+  dhSASA_sc,
+  dhSASA - dhSASA_sc as dhSASA_bb,
+  dhSASA_rel_by_charge,
+  aromatic_dSASA_fraction,
+  interface,
+  side,
+  natives.native as native
+  FROM
+  interface_sides,
+  natives
+  WHERE
+  interface_sides.struct_id = natives.struct_id
+  ORDER BY dSASA DESC
+  "
+  data = query_sample_sources(sample_sources, sele)
+  
+  fields = c("dSASA")
+  
+  data_rm_out <- ddply(data, .(sample_source, native), function(d2){
+    subset(d2, subset=(d2$dSASA <= quantile(d2$dSASA, .90))) #Remove high energy outliers
+  })
+  
+  data_top <- ddply(data, .(sample_source, native), function(d2){
+    subset(d2, subset=(d2$dSASA <= quantile(d2$dSASA, .10))) #Top 10 percent
+  })
+  
+  for (field in fields){
+    
+    parts = list(plot_parts, scale_x_continuous("SASA"))
+    group = c("sample_source", "side")
+    dens <- estimate_density_1d(data_rm_out,  group, field)
+    p <- ggplot(data=dens, na.rm=T) + parts +
+      geom_line(aes(x, y, colour=sample_source), size=1.2) +
+      ggtitle(paste("Buried", field, sep=" "))
+    plot_field(p, paste(field, "top_90_percent_den_sides_by_native_by_all", sep="_"), grid=side ~ .)
+    
+    group = c("sample_source", "interface", "side")
+    dens <- estimate_density_1d(data_rm_out,  group, field)
+    p <- ggplot(data=dens, na.rm=T) + parts +
+      geom_line(aes(x, y, colour=sample_source), size=1.2) +
+      ggtitle(paste("Buried", field, sep=" "))
+    plot_field(p, paste(field, "top_90_percent_den_sides_by_native","by_interface", sep="_"), grid=side~interface)
+    
+    parts = list(plot_parts, scale_x_continuous("SASA"))
+    group = c("sample_source", "side")
+    dens <- estimate_density_1d(data_top,  group, field)
+    p <- ggplot(data=dens, na.rm=T) + parts +
+      geom_line(aes(x, y, colour=sample_source), size=1.2) +
+      ggtitle(paste("Buried", field, sep=" "))
+    plot_field(p, paste(field, "top_10_percent_den_sides_by_native_by_all", sep="_"), grid=side ~ .)
+    
+    group = c("sample_source", "interface", "side")
+    dens <- estimate_density_1d(data_top,  group, field)
+    p <- ggplot(data=dens, na.rm=T) + parts +
+      geom_line(aes(x, y, colour=sample_source), size=1.2) +
+      ggtitle(paste("Buried", field, sep=" "))
+    plot_field(p, paste(field, "top_10_percent_den_sides_by_native","by_interface", sep="_"), grid=side~interface)
+    
+  }
+  
   
 })) # end FeaturesAnalysis

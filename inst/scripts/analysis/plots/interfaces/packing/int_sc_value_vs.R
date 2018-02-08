@@ -108,12 +108,48 @@ run=function(self, sample_sources, output_dir, output_formats){
   plot_field(p, "sc_value_vs_delta_unsat_polars_by_interface", grid=interface ~ sample_source)
   
 
-  #3D Plots
+  #By Native
   
-  #sc_value vs dG vs dSASA
+  sele <- "
+    SELECT
+  sc_value,
+  packstat,
+  dSASA,
+  dG,
+  dG_cross,
+  delta_unsatHbonds,
+  interface,
+  natives.native as native
+  FROM
+  interfaces,
+  natives,
+  WHERE
+  interfaces.struct_id = natives.struct_id
+  "
   
-  #Sides:
+  data_rm_out <- ddply(data, .(sample_source, native), function(d2){
+    subset(d2, subset=(d2$dG <= quantile(d2$dG, .90))) #Remove high energy outliers
+  })
   
-  #sc_value vs interface_energy
+  data_top <- ddply(data, .(sample_source, native), function(d2){
+    subset(d2, subset=(d2$dG <= quantile(d2$dG, .10))) #Top 10 percent
+  })
+  
+  #sc_value vs dG
+  p <- ggplot(data = data_rm_out, aes(x=sc_value, y=dG)) + parts +
+    ggtitle("sc_value_vs_dG") +
+    scale_x_continuous("sc_value", limit = c(0, 1.0)) +
+    scale_y_continuous("REU")
+  plot_field(p, "sc_value_vs_dG(top_90_percent)-by_native_by_all", grid=sample_source ~ .)
+  plot_field(p, "sc_value_vs_dG(top_90_percent)-by_native_interface", grid=interface ~ sample_source)
+  
+  p <- ggplot(data = data_top, aes(x=sc_value, y=dG)) + parts +
+    ggtitle("sc_value_vs_dG") +
+    scale_x_continuous("sc_value", limit = c(0, 1.0)) +
+    scale_y_continuous("REU")
+  plot_field(p, "top_10_percent_dG-sc_value_vs_dG_by_native_by_all", grid=sample_source ~ .)
+  plot_field(p, "top_10_percent_dG-sc_value_vs_dG_by_native_by_interface", grid=interface ~ sample_source)
+  
+  
   
 })) # end FeaturesAnalysis

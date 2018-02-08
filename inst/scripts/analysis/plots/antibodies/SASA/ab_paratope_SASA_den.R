@@ -73,7 +73,47 @@ run=function(self, sample_sources, output_dir, output_formats){
     geom_line(aes(x, y, colour=sample_source), size=1.2) +
     xlab("SASA") +
     ggtitle("CDR Paratope SASA")
-  plot_field(p, "paratope_sasa__top_10_percent_den")
+  plot_field(p, "paratope_sasa_top_10_percent_den")
   
+  #Natives
+  
+  sele = "
+  SELECT
+  paratope_SASA,
+  paratope_hSASA,
+  paratope_SASA - paratope_hSASA as paratope_pSASA,
+  natives.native as native
+  FROM
+  ab_metrics,
+  natives
+  WHERE
+  ab_metrics.struct_id = natives.struct_id
+  "
+  
+  data = query_sample_sources(sample_sources, sele)
+  
+  data_rm_out <- ddply(data, .(sample_source, native), function(d2){
+    subset(d2, subset=(d2$paratope_SASA <= quantile(d2$paratope_SASA, .90))) #Remove high energy outliers
+  })
+  
+  data_top <- ddply(data, .(sample_source, native), function(d2){
+    subset(d2, subset=(d2$paratope_SASA <= quantile(d2$paratope_SASA, .10))) #Top 10 percent
+  })
+  
+  group = c("sample_source")
+  dens <- estimate_density_1d(data_rm_out, group, c("paratope_SASA"))
+  p <- ggplot(data=dens, na.rm=T) + parts +
+    geom_line(aes(x, y, colour=sample_source), size=1.2) +
+    xlab("SASA") +
+    ggtitle("CDR Paratope SASA")
+  plot_field(p, "top_90_percent_paratope_sasa_den_by_native")
+  
+  group = c("sample_source")
+  dens <- estimate_density_1d(data_top, group, c("paratope_SASA"))
+  p <- ggplot(data=dens, na.rm=T) + parts +
+    geom_line(aes(x, y, colour=sample_source), size=1.2) +
+    xlab("SASA") +
+    ggtitle("CDR Paratope SASA")
+  plot_field(p, "paratope_sasa_top_10_percent_den_by_native")
   
 })) # end FeaturesAnalysis

@@ -142,4 +142,85 @@ run=function(self, sample_sources, output_dir, output_formats){
     scale_x_discrete(labels=function(x) abbreviate(x, minlength=17))
   plot_field(p, "dG_top_by_interface", grid=interface ~ .)
   
+
+  #By Natives
+  
+  sele <- "
+  SELECT
+  interfaces.dG as dG,
+  interfaces.dG_cross as dG_cross,
+  interfaces.hbond_E_fraction as hbond_E_fraction,
+  interfaces.interface as interface,
+  structure_scores.score_value as total_score,
+  natives.native as native
+  FROM
+  interfaces,
+  score_types,
+  structure_scores,
+  natives
+  WHERE
+  score_types.score_type_name='total_score' AND
+  structure_scores.score_type_id = score_types.score_type_id AND
+  structure_scores.struct_id = interfaces.struct_id AND
+  structure_scores.struct_id = natives.struct_id
+  ORDER BY dG;
+  "
+  
+  data = query_sample_sources(sample_sources, sele)
+  #data_rm_out = data[data$dG<=5000 & data$dG>-5000,]#Remove high energy outliers
+  
+  data_rm_out <- ddply(data, .(sample_source, native), function(d2){
+    subset(d2, subset=(d2$dG <= quantile(d2$dG, .90))) #Remove high energy outliers
+  })
+  
+  data_top <- ddply(data, .(sample_source, native), function(d2){
+    subset(d2, subset=(d2$dG <= quantile(d2$dG, .10))) #Top 10 percent
+  })
+  
+  f <- ddply(data, .(sample_source, native), function(d2){
+    data.frame(dG = d2[1:5,]$dG)
+  })
+  
+  #Basic Densities
+  fields = c("dG" )
+  for(field in fields){
+    parts = list(plot_parts, scale_x_continuous("Rosetta Energy"))
+    
+    group = c("sample_source")
+    dens <- estimate_density_1d(data_rm_out,  group, field)
+    p <- ggplot(data=dens, na.rm=T) + parts +
+      geom_line(aes(x, y, colour=sample_source), size=1.2) +
+      ggtitle(field)
+    plot_field(p, paste(field, "top_90_percent_den_by_native_by_all", sep="_"), )
+    
+    group = c("sample_source", "interface")
+    dens <- estimate_density_1d(data_rm_out,  group, field)
+    p <- ggplot(data=dens, na.rm=T) + parts +
+      geom_line(aes(x, y, colour=sample_source), size=1.2) +
+      ggtitle(field)
+    plot_field(p, paste(field, "top_90_percent_den_by_native_by_interface", sep="_"), grid=interface ~ .)
+    
+    group = c("sample_source")
+    dens <- estimate_density_1d(data_top,  group, field)
+    p <- ggplot(data=dens, na.rm=T) + parts +
+      geom_line(aes(x, y, colour=sample_source), size=1.2) +
+      ggtitle(field)
+    plot_field(p, paste(field, "top_10_percent_den_by_native_by_all", sep="_"), )
+    
+    group = c("sample_source", "interface")
+    dens <- estimate_density_1d(data_top,  group, field)
+    p <- ggplot(data=dens, na.rm=T) + parts +
+      geom_line(aes(x, y, colour=sample_source), size=1.2) +
+      ggtitle(field)
+    plot_field(p, paste(field, "top_10_percent_den_by_native_by_interface", sep="_"), grid=interface ~ .)
+    
+    group = c("sample_source")
+    dens <- estimate_density_1d(f,  group, field)
+    p <- ggplot(data=dens, na.rm=T) + parts +
+      geom_line(aes(x, y, colour=sample_source), size=1.2) +
+      ggtitle(field)
+    plot_field(p, paste(field, "top_5_den_by_native_by_all", sep="_"), )
+    
+  }
+  
 })) # end FeaturesAnalysis

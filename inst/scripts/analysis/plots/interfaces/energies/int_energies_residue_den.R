@@ -101,4 +101,74 @@ run=function(self, sample_sources, output_dir, output_formats){
     
   }
   
+  #By Natives
+  sele <-"
+  SELECT
+  interface_residues.interface as interface,
+  interface_residues.dG as dG,
+  interface_residues.dSASA as dSASA,
+  interface_residues.energy_int as energy_int,
+  interface_residues.energy_sep as energy_sep,
+  natives.native as native
+  FROM
+  interface_residues,
+  natives
+  WHERE
+  interface_residues.struct_id = natives.struct_id"
+  
+  #Density plots
+  
+  data = query_sample_sources(sample_sources, sele)
+  ##Overall plots for all residues: Add Side data once we have this.
+  
+  #Densities
+  
+  data_rm_out <- ddply(data, .(sample_source, native), function(d2){
+    subset(d2, subset=(d2$dG <= quantile(d2$dG, .90))) #Remove high energy outliers
+  })
+  
+  data_top <- ddply(data, .(sample_source, native), function(d2){
+    subset(d2, subset=(d2$dG <= quantile(d2$dG, .10))) #Top 10 percent
+  })
+  
+  #Energies
+  fields = c("dG")
+  for(field in fields){
+    group = c("sample_source")
+    dens <- estimate_density_1d(data_rm_out,  group, field)
+    p <- ggplot(data = dens, na.rm=T) + plot_parts +
+      geom_line(aes(x, y, colour=sample_source), size=1.2) +
+      ggtitle(paste("Residue", field, sep=" ")) +
+      xlab("REU")
+    #scale_x_continuous("REU", limit = c(-15, 15))
+    plot_field(p, paste(field, "residue_dens_top_90_percent_by_native_by_all", sep="_"))
+    
+    group = c("sample_source", "interface")
+    dens <- estimate_density_1d(data_rm_out,  group, field)
+    p <- ggplot(data = dens, na.rm=T) + plot_parts +
+      geom_line(aes(x, y, colour=sample_source), size=1.2) +
+      ggtitle(paste("Residue", field, sep=" ")) +
+      xlab("REU")
+    #scale_x_continuous("REU", limit = c(-15, 15))
+    plot_field(p, paste(field, "residue_dens_top_90_percent_by_native_by_interface", sep="_"), grid=interface ~ .)
+    
+    dens <- estimate_density_1d(data_top,  group, field)
+    p <- ggplot(data = dens, na.rm=T) + plot_parts +
+      geom_line(aes(x, y, colour=sample_source), size=1.2) +
+      ggtitle(paste("Residue", field, sep=" ")) +
+      xlab("REU")
+    #scale_x_continuous("REU", limit = c(-15, 15))
+    plot_field(p, paste(field, "top_10_percent_residue_by_native_dens_by_all", sep="_"))
+    
+    group = c("sample_source", "interface")
+    dens <- estimate_density_1d(data_top,  group, field)
+    p <- ggplot(data = dens, na.rm=T) + plot_parts +
+      geom_line(aes(x, y, colour=sample_source), size=1.2) +
+      ggtitle(paste("Residue", field, sep=" ")) +
+      xlab("REU")
+    #scale_x_continuous("REU", limit = c(-15, 15))
+    plot_field(p, paste(field, "top_10_percent_residue_dens_by_native_by_interface", sep="_"), grid=interface ~ .)
+    
+  }
+  
 }))

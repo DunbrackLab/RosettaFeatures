@@ -85,11 +85,11 @@ run=function(self, sample_sources, output_dir, output_formats){
   data = query_sample_sources(sample_sources, sele)
   #data_rm_out = data[data$dG<=5000 & data$dG>-5000,]#Remove high energy outliers
   
-  data_rm_out <- ddply(data, .(sample_source, native), function(d2){
+  data_top <- ddply(data, .(sample_source, native), function(d2){
     subset(d2, subset=(d2$sc_value >= quantile(d2$sc_value, .90))) #Remove high energy outliers
   })
   
-  data_top <- ddply(data, .(sample_source, native), function(d2){
+  data_rm_out <- ddply(data, .(sample_source, native), function(d2){
     subset(d2, subset=(d2$sc_value >= quantile(d2$sc_value, .10))) #Top 10 percent
   })
   

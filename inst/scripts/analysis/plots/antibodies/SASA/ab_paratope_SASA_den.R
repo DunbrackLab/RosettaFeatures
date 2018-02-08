@@ -60,6 +60,14 @@ run=function(self, sample_sources, output_dir, output_formats){
   })
   
   group = c("sample_source")
+  dens <- estimate_density_1d(data, group, c("paratope_SASA"))
+  p <- ggplot(data=dens, na.rm=T) + parts +
+    geom_line(aes(x, y, colour=sample_source), size=1.2) +
+    xlab("SASA") +
+    ggtitle("CDR Paratope SASA")
+  plot_field(p, "paratope_sasa_den")
+  
+  group = c("sample_source")
   dens <- estimate_density_1d(data_rm_out, group, c("paratope_SASA"))
   p <- ggplot(data=dens, na.rm=T) + parts +
     geom_line(aes(x, y, colour=sample_source), size=1.2) +

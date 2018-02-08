@@ -165,8 +165,8 @@ run=function(self, sample_sources, output_dir, output_formats){
     ggtitle("dG vs dSASA") +
     ylab("SASA") +
     xlab("REU (dG)")
-  plot_field(p, "dG_vs_dSASA_top_90_percentdG_by_all")
-  plot_field(p, "dG_vs_dSASA_top_90_percentdG_by_interface", grid=~ interface)
+  plot_field(p, "dG_vs_dSASA_top_90_percentdG_by_native_by_all")
+  plot_field(p, "dG_vs_dSASA_top_90_percentdG_native_by_interface", grid=~ interface)
   
   p <- ggplot(data=data_top, aes(y = dSASA, x = dG, colour=sample_source)) + parts_no_density +
     ggtitle("dG vs dSASA") +

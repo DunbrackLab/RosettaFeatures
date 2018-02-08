@@ -81,11 +81,18 @@ run=function(self, sample_sources, output_dir, output_formats){
   
   parts_no_density = list(
     geom_point(size=1.2, pch="o"),
-    stat_smooth(method=lm),
     theme_bw()
     )
   
   #dG vs dSASA
+  
+  p <- ggplot(data=data, aes(y = dSASA, x = dG, colour=sample_source)) + parts_no_density +
+    ggtitle("dG vs dSASA") +
+    ylab("SASA") +
+    xlab("REU (dG)")
+  plot_field(p, "dG_vs_dSASA_by_all")
+  plot_field(p, "dG_vs_dSASA_by_interface", grid=~ interface)
+  
   p <- ggplot(data=data_rm_out, aes(y = dSASA, x = dG, colour=sample_source)) + parts_no_density +
     ggtitle("dG vs dSASA") +
     ylab("SASA") +

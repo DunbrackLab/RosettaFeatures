@@ -168,14 +168,14 @@ data_top <- ddply(data, .(sample_source, native), function(d2){
 })
 
 f <- ddply(data, .(sample_source, native), function(d2){
-  data.frame(total_score = d2[1:20,]$total_score)
+  data.frame(total_score = d2[1:5,]$total_score)
 })
 
 
 
 dens <- estimate_density_1d(f, ids = c("sample_source"), variable = "total_score")
 
-plot_id <- "total_score_top_20_by_native"
+plot_id <- "total_score_top_5_by_native"
 p <- ggplot(data=dens) + theme_bw() +
   geom_line(aes(x, y, colour=sample_source), size=1.4) +
   geom_indicator(aes(indicator=counts, colour=sample_source, group=sample_source)) +

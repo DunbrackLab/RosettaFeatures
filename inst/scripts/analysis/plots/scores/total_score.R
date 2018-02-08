@@ -135,4 +135,82 @@ p <- ggplot(data=avgs ) +
   scale_x_discrete(labels=function(x) abbreviate(x, minlength=17))
 save_plots(self, "best_total_score", sample_sources, output_dir, output_formats)
 
+
+#By Native
+
+sele <-"
+SELECT
+structure_scores.struct_id as struct_id, 
+natives.native as native,
+structure_scores.score_value as total_score, 
+structure_scores.score_type_id as score_type 
+FROM 
+structure_scores, 
+score_types,
+natives
+
+WHERE 
+score_types.score_type_name='total_score' AND 
+structure_scores.score_type_id = score_types.score_type_id AND
+natives.struct_id = structure_scores.struct_id
+ORDER BY score_value;"
+
+
+data <- query_sample_sources(sample_sources, sele)
+
+data_rm_out <- ddply(data, .(sample_source, native), function(d2){
+  
+  subset(d2, subset=(d2$total_score <= quantile(d2$total_score, .90))) #Remove high energy outliers
+})
+
+data_top <- ddply(data, .(sample_source, native), function(d2){
+  subset(d2, subset=(d2$total_score <= quantile(d2$total_score, .10))) #Top 10 percent
+})
+
+f <- ddply(data, .(sample_source, native), function(d2){
+  data.frame(total_score = d2[1:20,]$total_score)
+})
+
+
+
+dens <- estimate_density_1d(f, ids = c("sample_source"), variable = "total_score")
+
+plot_id <- "total_score_top_20_by_native"
+p <- ggplot(data=dens) + theme_bw() +
+  geom_line(aes(x, y, colour=sample_source), size=1.4) +
+  geom_indicator(aes(indicator=counts, colour=sample_source, group=sample_source)) +
+  ggtitle("Rosetta Structure Score - Top 20") +
+  labs(x="Rosetta Energy Units") +
+  scale_y_continuous("FeatureDensity", breaks=c(0, .3, .6))
+save_plots(self, plot_id, sample_sources, output_dir, output_formats)
+
+
+dens <- estimate_density_1d(
+  data = data_rm_out,
+  ids = c("sample_source"),
+  variable = "total_score")
+
+plot_id <- "total_score_top_90_percent_by_native"
+p <- ggplot(data=dens) + theme_bw() +
+  geom_line(aes(x, y, colour=sample_source), size=1.4) +
+  geom_indicator(aes(indicator=counts, colour=sample_source, group=sample_source)) +
+  ggtitle("Rosetta Structure Score") +
+  labs(x="Rosetta Energy Units") +
+  scale_y_continuous("FeatureDensity", breaks=c(0, .3, .6))
+save_plots(self, plot_id, sample_sources, output_dir, output_formats)
+
+dens <- estimate_density_1d(
+  data = data_top,
+  ids = c("sample_source"),
+  variable = "total_score")
+
+plot_id <- "total_score_top_10_percent_by_native"
+p <- ggplot(data=dens) + theme_bw() +
+  geom_line(aes(x, y, colour=sample_source), size=1.4) +
+  geom_indicator(aes(indicator=counts, colour=sample_source, group=sample_source)) +
+  ggtitle("Rosetta Structure Score") +
+  labs(x="Rosetta Energy Units") +
+  scale_y_continuous("FeatureDensity", breaks=c(0, .3, .6))
+save_plots(self, plot_id, sample_sources, output_dir, output_formats)
+
 })) # end FeaturesAnalysis

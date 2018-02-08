@@ -114,6 +114,56 @@ run=function(self, sample_sources, output_dir, output_formats){
       geom_line(aes(x, y, colour=sample_source), size=1.2) +
       ggtitle(field)
     plot_field(p, paste(field, "den_by_native_by_interface", sep="_"), grid=interface ~ .)
+    
+    dens <- estimate_density_1d(data,  group, field)
+    p <- ggplot(data=dens, na.rm=T) + parts +
+      geom_line(aes(x, y, colour=sample_source), size=1.2) +
+      ggtitle(field)
+    plot_field(p, paste(field, "den_by_native_by_all", sep="_"))
+    
+    group = c("sample_source", "interface")
+    dens <- estimate_density_1d(data,  group, field)
+    p <- ggplot(data=dens, na.rm=T) + parts +
+      geom_line(aes(x, y, colour=sample_source), size=1.2) +
+      ggtitle(field)
+    plot_field(p, paste(field, "den_by_native_by_interface", sep="_"), grid=interface ~ .)
+    
+    dens <- estimate_density_1d(data_rm_out,  group, field)
+    p <- ggplot(data=dens, na.rm=T) + parts +
+      geom_line(aes(x, y, colour=sample_source), size=1.2) +
+      ggtitle(field)
+    plot_field(p, paste(field, "den_top_90_percent_by_native_by_all", sep="_"))
+    
+    dens <- estimate_density_1d(data_rm_out,  group, field)
+    p <- ggplot(data=dens, na.rm=T) + parts +
+      geom_line(aes(x, y, colour=sample_source), size=1.2) +
+      ggtitle(field)
+    plot_field(p, paste(field, "den_top_90_percent_by_native_by_interface", sep="_"), grid=interface ~ .)
+    
+    dens <- estimate_density_1d(data_top,  group, field)
+    p <- ggplot(data=dens, na.rm=T) + parts +
+      geom_line(aes(x, y, colour=sample_source), size=1.2) +
+      ggtitle(field)
+    plot_field(p, paste(field, "den_top_10_percent_by_native_by_all", sep="_"))
+    
+    dens <- estimate_density_1d(data_top,  group, field)
+    p <- ggplot(data=dens, na.rm=T) + parts +
+      geom_line(aes(x, y, colour=sample_source), size=1.2) +
+      ggtitle(field)
+    plot_field(p, paste(field, "den_top_10_percent_by_native_by_interface", sep="_"), grid=interface ~ .)
+    
+    dens <- estimate_density_1d(f,  group, field)
+    p <- ggplot(data=dens, na.rm=T) + parts +
+      geom_line(aes(x, y, colour=sample_source), size=1.2) +
+      ggtitle(field)
+    plot_field(p, paste(field, "den_top_5_by_native_by_all", sep="_"))
+    
+    dens <- estimate_density_1d(f,  group, field)
+    p <- ggplot(data=dens, na.rm=T) + parts +
+      geom_line(aes(x, y, colour=sample_source), size=1.2) +
+      ggtitle(field)
+    plot_field(p, paste(field, "den_top_5_by_native_by_interface", sep="_"), grid=interface ~ .)
+    
   }
   
 })) # end FeaturesAnalysis
